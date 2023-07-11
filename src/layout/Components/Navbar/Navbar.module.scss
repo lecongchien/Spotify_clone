@@ -1,0 +1,95 @@
+.navbar {
+    padding: 23px 0px 0 25px;
+}
+.content {
+    margin-top: 20px;
+}
+.category {
+    .list {
+        width: 100%;
+        line-height: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        line-height: 30px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #b2b1b1;
+        font-weight: bold;
+        > p {
+            transition: 200ms ease-in-out;
+            &:hover {
+                color: #fff;
+            }
+            margin-top: 5px;
+        }
+        > svg {
+            width: 25px;
+            font-size: 25px;
+            margin-right: 12px;
+            transition: 200ms ease-in-out;
+            &:hover {
+                transition: 200ms ease-in-out;
+                color: #fff;
+            }
+            &:hover + p {
+                transition: 200ms ease-in-out;
+                color: #fff;
+            }
+        }
+    }
+    .active {
+        color: #fff;
+    }
+}
+.itemslist {
+    margin-top: 35px;
+
+    > a {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        margin-bottom: 10px;
+        > svg {
+            margin-right: 13.5px;
+            font-size: 28px;
+        }
+    }
+}
+.playlist {
+    position: relative;
+    margin-top: 15px;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 90%;
+        height: 0.5px;
+        background-color: rgb(255, 255, 255);
+    }
+    &::after {
+        content: '';
+        top: 0;
+        position: absolute;
+        background-image: linear-gradient(180deg, #000000c1 10%, transparent);
+        z-index: 2;
+        width: 90%;
+        height: 20px;
+    }
+}
+.dowmload {
+    margin-top: 10px;
+    > a {
+        width: 100%;
+        height: 30px;
+        align-items: center;
+        line-height: 30px;
+        > svg {
+            font-size: 20px;
+            margin-right: 16px;
+        }
+    }
+}
+.container {
+}

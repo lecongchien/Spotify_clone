@@ -1,25 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Run, { publicRoutes } from './Routes/Routes';
+import DefaultLayout from '~/layout/DefaultLayout';
+import { createContext, Fragment, useState } from 'react';
 
+export const MContext = createContext(); //exporting context object
+export const AlbumsContext = createContext();
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    const [state, setState] = useState('');
+    const [albumState, setAlbumsStates] = useState('');
+    const [dsa, setdsad] = useState('');
+
+    // localStorage.setItem('myData', JSON.stringify(albumState));
+    return (
+        <MContext.Provider
+            value={{
+                state: state,
+                setMessage: (value) => setState(value),
+            }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <div>
+                <AlbumsContext.Provider
+                    value={{
+                        albumState: albumState,
+                        setAlbum: (values) => setAlbumsStates(values),
+                    }}
+                >
+                    <Router>
+                        <div className="App">
+                            <Routes>
+                                {publicRoutes.map((router, index) => {
+                                    const Page = router.component;
+                                    let Layout = DefaultLayout;
+                                    if (router.layout) {
+                                        Layout = router.layout;
+                                    } else if (router.layout === null) {
+                                        Layout = Fragment;
+                                    }
+                                    return (
+                                        <Route
+                                            key={index}
+                                            path={
+                                                router.path === '/albums/:AlbumsId' ? '/albums/:AlbumsId' : router.path
+                                            }
+                                            element={
+                                                <Layout>
+                                                    <Page />
+                                                </Layout>
+                                            }
+                                        />
+                                    );
+                                })}
+                            </Routes>
+                        </div>
+                    </Router>
+                </AlbumsContext.Provider>
+            </div>
+        </MContext.Provider>
+    );
 }
 
 export default App;

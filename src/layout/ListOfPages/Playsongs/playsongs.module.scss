@@ -1,0 +1,17 @@
+.explicit {
+    display: flex;
+    font-weight: 600;
+    color: #c5c5c5;
+    > svg {
+        margin: 0 5px 0 0;
+    }
+}
+.title {
+    font-weight: bold;
+}
+.title_name_song {
+    &:hover {
+        transition: 50ms ease-in-out;
+        text-decoration: revert;
+    }
+}

@@ -1,0 +1,42 @@
+.list {
+    > ul {
+        width: 100%;
+        height: 140px;
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column-reverse;
+
+        &:hover {
+            &::-webkit-scrollbar {
+                display: block;
+            }
+        }
+        &::-webkit-scrollbar {
+            width: 12px;
+            display: none;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(170, 170, 170, 0.547);
+        }
+        &::-webkit-scrollbar-thumb {
+            &:hover {
+                background-color: rgba(170, 170, 170, 0.832);
+            }
+        }
+
+        > li {
+            position: relative;
+            margin-top: 11px;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.7;
+            cursor: pointer;
+            &:hover {
+                position: relative;
+                z-index: 3;
+                opacity: 1;
+            }
+        }
+    }
+}
