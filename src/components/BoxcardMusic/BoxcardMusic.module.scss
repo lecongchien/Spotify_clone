@@ -1,5 +1,8 @@
 .boxmudic {
     display: flex;
+    > a {
+        display: flex;
+    }
 }
 .search {
     width: 100%;
@@ -16,11 +19,51 @@
     flex-wrap: wrap;
 }
 .genres {
-    width: 220px;
+    position: relative;
+    width: 210px;
     border-radius: 10px;
-    height: 220px;
+    height: 210px;
     margin: 10px;
-    background-color: red;
     text-transform: capitalize;
     padding: 20px 0 0 15px;
+    overflow: hidden;
+    > h2 {
+        position: relative;
+        z-index: 2;
+    }
 }
+
+.images {
+    position: absolute;
+    transform: rotate(45deg) translateX(160px);
+    inset: 0;
+    width: 100px;
+    height: 100px;
+    z-index: 1;
+    > img {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .boxmudic {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .boxmudic {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+// @media screen and (min-width: 1150px) and (max-width: 1268px) {
+// }
+
+// @media screen and (max-width: 1150px) {
+//     .boxmudic {
+//         display: grid;
+//         grid-template-columns: 1fr 1fr 1fr;
+//     }
+// }

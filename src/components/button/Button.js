@@ -27,6 +27,7 @@ function Button({
     settingapp = false,
     buttonPlay = false,
     PlayBigGreen = false,
+    smallButton = false,
     children,
     ...pastProps
 }) {
@@ -60,6 +61,7 @@ function Button({
         icon2,
         icon3,
         settingapp,
+        smallButton,
     });
 
     const changeSizeCricle = cx('', {

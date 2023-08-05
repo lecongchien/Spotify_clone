@@ -3,16 +3,32 @@ import Navbar from '../Components/Navbar';
 import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
 import MoodTool from '../Components/MoodTool/MoodTool';
+import { useContext, useEffect, useRef } from 'react';
+import { Setsize } from '~/App';
 
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {
+    const handelSize = useRef(null);
     const callbackFunction = (childData) => {
         console.log(childData);
     };
+
+    const sizeIn = useContext(Setsize);
+
+    useEffect(() => {
+        if (handelSize.current) {
+            if (sizeIn.setSizeApp) {
+                handelSize.current.style.gridTemplateColumns = '1.7fr 2fr';
+            } else {
+                handelSize.current.style.gridTemplateColumns = '0.6fr 2fr';
+            }
+        }
+    }, [sizeIn]);
+
     return (
         <>
-            <div className={cx('HI_THERE')}>
+            <div ref={handelSize} className={cx('HI_THERE')}>
                 <div className={cx('navbar')}>
                     <Navbar />
                 </div>
@@ -20,13 +36,10 @@ function DefaultLayout({ children }) {
                     <div className={cx('contains')}>
                         <Header parentCallback={callbackFunction} />
                         {children}
-                        {/* <div className={cx('line')}>
-                        <div></div>
-                    </div> */}
                     </div>
                 </div>
-                <MoodTool />
             </div>
+            <MoodTool />
         </>
     );
 }

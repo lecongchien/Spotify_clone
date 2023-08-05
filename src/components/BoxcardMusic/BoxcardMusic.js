@@ -7,8 +7,10 @@ import ReusableBox from '../ReusableBox';
 import { ThemeContext } from '../themeContext/themeContext';
 import Button from '../button/Button';
 import axios from 'axios';
+import { Search } from '~/App';
 import Run from '~/Routes/Routes';
 import { useLocation, useParams } from 'react-router-dom';
+import TopResults from '../TopResults/TopResults';
 const cx = classNames.bind(styles);
 
 function BoxcardMusic({ NameAlbum = false }) {
@@ -18,6 +20,11 @@ function BoxcardMusic({ NameAlbum = false }) {
     const theme = useContext(ThemeContext);
     const location = useParams();
     const [Genres, setGenres] = useState([]);
+    const locations = useLocation();
+    const allLocation = locations.pathname;
+    const setIdAlbum = allLocation.split('/');
+    const IdAlBum = setIdAlbum[2];
+
     useEffect(() => {
         let IdTrack = '';
         if (albums.length) {
@@ -33,9 +40,9 @@ function BoxcardMusic({ NameAlbum = false }) {
 
     const fetchProducts = useCallback(async () => {
         const reload = await axios
-            .get('https://api.spotify.com/v1/recommendations/available-genre-seeds', theme.artistsParmester)
+            .get('https://api.spotify.com/v1/recommendations?seed_genres=pop', theme.artistsParmester)
             .then((response) => {
-                setGenres(response.data.genres);
+                setGenres(response.data.tracks);
             })
             .catch((error) => {
                 console.log(error);
@@ -47,20 +54,24 @@ function BoxcardMusic({ NameAlbum = false }) {
     }, [fetchProducts]);
     return (
         <>
+            {albums == '' ? null : <TopResults />}
             <div className={cx('search')}>
                 {albums == '' ? null : (
                     <div className={cx('title')}>{NameAlbum ? 'Album khác của' + ' ' + NameAlbum : 'Album'}</div>
                 )}
+
                 <MContext.Consumer>
                     {(context) => {
                         setAlbums(context.state);
                     }}
                 </MContext.Consumer>
+
                 <AlbumsContext.Consumer>
                     {(context) => {
                         context.setAlbum(ai);
                     }}
                 </AlbumsContext.Consumer>
+
                 <div className={cx('boxmudic')}>
                     {albums === '' ? null : (
                         <>
@@ -83,12 +94,22 @@ function BoxcardMusic({ NameAlbum = false }) {
                         </>
                     )}
                 </div>
-                {albums == '' ? (
+
+                {albums == '' && !(allLocation === `/albums/${IdAlBum}`) ? (
                     <div className={cx('content_genres')}>
                         {Genres.map((element, index) => {
+                            const randomcolor = Math.floor(Math.random() * 999999);
+                            const random = randomcolor > 100000 && randomcolor;
+                            const color = {
+                                backgroundColor: `#${random}`,
+                            };
+
                             return (
-                                <div className={cx('genres')}>
-                                    <h2>{element}</h2>
+                                <div style={color} className={cx('genres')}>
+                                    <h2>{element.artists[0].name}</h2>
+                                    <div className={cx('images')}>
+                                        <img src={element.album.images[1].url} />
+                                    </div>
                                 </div>
                             );
                         })}

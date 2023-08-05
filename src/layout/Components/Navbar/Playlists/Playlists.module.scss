@@ -1,42 +1,80 @@
 .list {
+    width: 100%;
     > ul {
-        width: 100%;
-        height: 140px;
-        overflow-y: scroll;
         display: flex;
         flex-direction: column-reverse;
-
-        &:hover {
-            &::-webkit-scrollbar {
-                display: block;
-            }
-        }
-        &::-webkit-scrollbar {
-            width: 12px;
-            display: none;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: rgba(170, 170, 170, 0.547);
-        }
-        &::-webkit-scrollbar-thumb {
-            &:hover {
-                background-color: rgba(170, 170, 170, 0.832);
-            }
-        }
-
+        width: 100%;
         > li {
+            width: 100%;
             position: relative;
-            margin-top: 11px;
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
             font-size: 14px;
             font-weight: 600;
-            opacity: 0.7;
             cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 5px;
+            &:hover {
+                background-color: #3c3c3c84;
+            }
             &:hover {
                 position: relative;
                 z-index: 3;
                 opacity: 1;
             }
+        }
+    }
+}
+.icon {
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #575757;
+}
+.like_Song {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    &:hover {
+        background-color: #3c3c3c84;
+    }
+    > div {
+        padding: 5px 0 0 5px;
+    }
+}
+.title_List_Play {
+    width: 80%;
+    padding-left: 10px;
+    line-height: 1.8;
+    > h3 {
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 600;
+        color: #fff;
+    }
+    > span {
+        display: flex;
+        align-items: center;
+        width: 99%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
+        font-size: 13px;
+        color: #bab9b9;
+        > p {
+            color: #50b95d;
+            transform: rotate(45deg);
+            margin-right: 10px;
+        }
+        > svg {
+            width: 5px;
+            padding: 0 5px;
         }
     }
 }

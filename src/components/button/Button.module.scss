@@ -147,3 +147,19 @@
         margin-right: 5px;
     }
 }
+
+.smallButton {
+    cursor: pointer;
+    color: #ffff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 12px;
+    background-color: #262626;
+    border-radius: 20px;
+    text-align: center;
+    margin-right: 10px;
+    transition: 100ms ease;
+    &:hover {
+        background-color: #2f2e2e;
+    }
+}

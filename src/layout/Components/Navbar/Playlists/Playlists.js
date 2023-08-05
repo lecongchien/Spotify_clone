@@ -1,5 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from './Playlists.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle, faMusic, faThumbTack } from '@fortawesome/free-solid-svg-icons';
+import { SpotifyIcon } from '~/assets/Icon/Icon';
 const cx = classNames.bind(styles);
 
 function Playlists() {
@@ -87,11 +90,33 @@ function Playlists() {
     ];
     return (
         <div className={cx('list')}>
+            <div className={cx('like_Song')}>
+                <div>
+                    <SpotifyIcon />
+                </div>
+                <div className={cx('title_List_Play')}>
+                    <h3>Bài hát đã thích</h3>
+                    <span>
+                        <p>
+                            <FontAwesomeIcon icon={faThumbTack} />
+                        </p>
+                        Danh sách phát <FontAwesomeIcon icon={faCircle} /> 6 bài hát
+                    </span>
+                </div>
+            </div>
             <ul>
                 {list.map((element) => {
                     return (
                         <li key={element.id}>
-                            {element.textlist + ' #' + element.id}
+                            <div className={cx('icon')}>
+                                <FontAwesomeIcon icon={faMusic} />
+                            </div>
+                            <div className={cx('title_List_Play')}>
+                                <h3>{element.textlist + ' #' + element.id}</h3>
+                                <span>
+                                    Danh sách phát <FontAwesomeIcon icon={faCircle} /> Chiến lê
+                                </span>
+                            </div>
                         </li>
                     );
                 })}

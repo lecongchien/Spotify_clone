@@ -8,11 +8,15 @@ function ReusableBox({
     image = false,
     name = false,
     date = false,
+    TopResults = false,
+    hover = false,
     children,
     ...passProps
 }) {
     const className = cx('', {
         container,
+        TopResults,
+        hover,
     });
 
     const props = {
@@ -21,11 +25,16 @@ function ReusableBox({
 
     return (
         <div key={key} className={className} {...props}>
-            <div className={cx('image')}>
-                <img src={image} />
-            </div>
-            <h3>{name}</h3>
-            <p>{date}</p>
+            {container && (
+                <>
+                    <div className={cx('image')}>
+                        <img src={image} />
+                    </div>
+                    <h3>{name}</h3>
+                    <p>{date}</p>
+                </>
+            )}
+            {TopResults && children}
         </div>
     );
 }

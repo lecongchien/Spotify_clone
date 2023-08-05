@@ -1,17 +1,11 @@
 .container {
-    width: 225px;
+    width: 215px;
     background-color: #29292960;
     border-radius: 3px;
     padding: 15px 15px 20px;
-    margin-right: 25px;
-    transition: 150ms ease-in-out;
-    &:hover {
-        transition: 150ms ease-in-out;
-        background-color: #a6a6a626;
-    }
+    margin: 0 24px 24px 0;
+    grid-row: 1;
     .image {
-        width: 195px;
-        height: 195px;
         > img {
             width: 100%;
             object-fit: cover;
@@ -29,5 +23,38 @@
     > p {
         font-weight: 600;
         margin-top: 5px;
+    }
+}
+.hover {
+    transition: 150ms ease-in-out;
+    border-radius: 5px;
+    &:hover {
+        transition: 150ms ease-in-out;
+        background-color: #a6a6a626;
+    }
+}
+
+.TopResults {
+    flex: 0 0 48%;
+    max-width: 48%;
+}
+
+@media screen and (max-width: 1200px) and (min-width: 1130px) {
+    .container {
+        width: 16.5vw;
+    }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 920px) {
+    .container {
+        width: 19.5vw;
+        margin-right: 20px;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .container {
+        width: 27vw;
+        margin-right: 5px;
     }
 }

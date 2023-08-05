@@ -66,7 +66,6 @@ function Header() {
         },
     ];
 
-    console.log(allLocation);
     return (
         <div className={cx('header')}>
             <div className={cx('container')}>
@@ -75,16 +74,16 @@ function Header() {
                     <Button button icon={<FontAwesomeIcon icon={faChevronRight} />} />
                     {allLocation === '/' ? null : (
                         <>
-                            {allLocation === '/search/' || allLocation === `/search/${run[4]}` ? (
+                            {!(
+                                allLocation === `/albums/${IdAlBum}` ||
+                                allLocation === config.routes.playlist ||
+                                allLocation === config.routes.album ||
+                                allLocation === config.routes.podcast ||
+                                allLocation === config.routes.artists
+                            ) ? (
                                 <SearchItem />
                             ) : (
-                                <>
-                                    {allLocation === '/search/' ? (
-                                        <SearchItem />
-                                    ) : (
-                                        <>{allLocation === `/albums/${IdAlBum}` ? null : <CollectionItem />}</>
-                                    )}
-                                </>
+                                <>{!(allLocation === `/albums/${IdAlBum}`) ? <CollectionItem /> : null}</>
                             )}
                         </>
                     )}

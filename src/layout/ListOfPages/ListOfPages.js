@@ -1,7 +1,7 @@
 import { faCircle, faClock, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import styles from './ListOfPages.module.scss';
 import ColorThief from 'colorthief';
@@ -16,8 +16,6 @@ function ListOfPages() {
     const { AlbumsId } = useParams();
     const [component, setComponet] = useState([null]);
     const theme = useContext(ThemeContext);
-    const location = useLocation();
-    console.log(AlbumsId);
 
     const fetchProducts = useCallback(async () => {
         const reload = await axios
@@ -182,9 +180,6 @@ function ListOfPages() {
                 <span className={cx('copyrights')}>{copyrights[0].name}</span>
                 <span className={cx('copyrights')}>{copyrights[1].name}</span>
             </footer>
-            <div className={cx('albums')}>
-                {component && <BoxcardMusic NameAlbum={component.artists && component.artists[0].name} />}
-            </div>
         </>
     );
 }

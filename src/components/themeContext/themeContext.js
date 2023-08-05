@@ -2,6 +2,9 @@ import { useState, useEffect, createContext } from 'react';
 const ThemeContext = createContext();
 const CLIENT_ID = '4f482d3452d04e2090916aed8c10631e';
 const CLIENT_SECRET = '2135116a364c49d8b65c3115ddef3f4c';
+const REDIRECT_URI = 'http://localhost:3000';
+const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
+const RESPONSE_TYPE = 'token';
 
 function ThemeProvider({ children }) {
     const [accectsToken, setAccectsToken] = useState('');

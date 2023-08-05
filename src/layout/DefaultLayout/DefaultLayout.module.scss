@@ -1,19 +1,17 @@
 .HI_THERE {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1.7fr 2fr;
 }
 .container {
-    display: flex;
-    flex: 0 0 80%;
-    max-width: 80%;
     overflow-y: hidden;
 }
 .navbar {
-    flex: 0 0 20%;
-    max-width: 20%;
+    width: 100%;
 }
 .contains {
     width: 100%;
     background-color: #111111;
+    padding-bottom: 120px;
     height: 100vh;
     overflow: overlay;
     margin: 7px;
@@ -25,7 +23,7 @@
         }
     }
     &::-webkit-scrollbar {
-        width: 12px;
+        width: 18px;
     }
     /* Track */
     &::-webkit-scrollbar-track {
