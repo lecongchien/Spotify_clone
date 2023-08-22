@@ -1,30 +1,31 @@
 import classNames from 'classnames/bind';
 import styles from './playsongs.module.scss';
-import { DataIdSong } from '~/App';
+import { DataIdSong, NumberContext, PlayAndPause } from '~/App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Explicit, HeartLips } from '~/assets/Icon/Icon';
 import { ThemeContext } from '~/components/themeContext/themeContext';
+import Beat from '~/assets/image/play.gif';
 import { useCallback, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 const cx = classNames.bind(styles);
 
 function Playsongs({ component }) {
     const [handleMouse, setHandleMouse] = useState();
-    const [playStates, setPlayStates] = useState(false);
-    const [Idsong, setIdSong] = useState('');
-    const [runtoggle, setRuntoggle] = useState(false);
-    const theme = useContext(ThemeContext);
-    const togglePlay = (index) => {
-        setRuntoggle(runtoggle === false ? true : false);
+    const [playStates, setPlayStates] = useState([]);
+    const [Idsong, setIdSong] = useState([]);
+    const [toggle, setToggle] = useState('');
 
+    const togglePlay = (index) => {
         const newPlayStates = component.tracks?.items.map((state, i) => {
             const run = [state, component];
             if (index === i) {
                 setIdSong(run);
-                return true;
+                const a = { ...state, isPlaying: !state.isPlaying }; // Đảo ngược trạng thái play/
+                setToggle(a.isPlaying); // Đảo ngược trạng thái play/pause
+                return a;
             } else {
-                return false;
+                return { ...state, isPlaying: false }; // Đảo ngược trạng thái play/pause
             }
         });
 
@@ -53,7 +54,7 @@ function Playsongs({ component }) {
                 const seconds = Math.floor(milliseconds / 1000);
                 const minutes = Math.floor(seconds / 60);
                 const remainingSeconds = seconds % 60;
-
+                // console.log(element.preview_url);
                 return (
                     <>
                         <DataIdSong.Consumer>
@@ -61,22 +62,38 @@ function Playsongs({ component }) {
                                 context.ID(Idsong);
                             }}
                         </DataIdSong.Consumer>
-                        <tr onMouseOver={() => handleMouseOver(index)} onMouseLeave={() => MouseLeave()}>
+                        <PlayAndPause.Consumer>
+                            {(context) => {
+                                context.Toggle(toggle);
+                            }}
+                        </PlayAndPause.Consumer>
+                        <tr
+                            className={cx('see_quest')}
+                            onMouseOver={() => handleMouseOver(index)}
+                            onMouseLeave={() => MouseLeave()}
+                        >
                             <td>
                                 {handleMouse && handleMouse[index] ? (
                                     <>
                                         <FontAwesomeIcon
                                             onClick={() => togglePlay(index)}
-                                            icon={playStates && playStates[index] && runtoggle ? faPause : faPlay}
+                                            icon={playStates[index]?.isPlaying ? faPause : faPlay}
                                         />
                                     </>
                                 ) : (
-                                    <>{index + 1}</>
+                                    <>{!playStates[index]?.isPlaying ? <>{index + 1}</> : <img src={Beat} />}</>
                                 )}
                             </td>
                             <td>
                                 <span className={cx('title')}>
-                                    <a href="" className={cx('title_name_song')}>
+                                    <a
+                                        style={{ color: playStates[index]?.isPlaying ? '#1ed760' : '#ccc' }}
+                                        href=""
+                                        className={cx('title_name_song')}
+                                    >
+                                        {/* {logNumberSong.setNb === element.preview_url && <>
+                                        
+                                        </>} */}
                                         {element.name}
                                     </a>
                                 </span>

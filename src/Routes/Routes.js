@@ -18,7 +18,7 @@ const publicRoutes = [
     { path: config.routes.artists, component: Artists },
     { path: config.routes.album, component: Album },
     { path: config.routes.playlist, component: Playlists },
-    { path: '/albums/:AlbumsId', component: ListOfPages },
+    { path: '/albums/:ID', component: ListOfPages },
 ];
 
 function Run() {

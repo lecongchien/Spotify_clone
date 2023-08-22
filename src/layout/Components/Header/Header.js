@@ -75,6 +75,7 @@ function Header() {
                     {allLocation === '/' ? null : (
                         <>
                             {!(
+                                allLocation === `/artists/${IdAlBum}` ||
                                 allLocation === `/albums/${IdAlBum}` ||
                                 allLocation === config.routes.playlist ||
                                 allLocation === config.routes.album ||
@@ -82,9 +83,7 @@ function Header() {
                                 allLocation === config.routes.artists
                             ) ? (
                                 <SearchItem />
-                            ) : (
-                                <>{!(allLocation === `/albums/${IdAlBum}`) ? <CollectionItem /> : null}</>
-                            )}
+                            ) : null}
                         </>
                     )}
                 </div>

@@ -28,6 +28,8 @@ function Button({
     buttonPlay = false,
     PlayBigGreen = false,
     smallButton = false,
+    itemsong = false,
+    hover = false,
     children,
     ...pastProps
 }) {
@@ -62,6 +64,8 @@ function Button({
         icon3,
         settingapp,
         smallButton,
+        itemsong,
+        hover,
     });
 
     const changeSizeCricle = cx('', {
@@ -142,7 +146,7 @@ function Button({
             {buttonPlay ? (
                 <>
                     <div className={changeSizeCricle} onClick={() => play()}>
-                        {playMS ? <FontAwesomeIcon icon={faPlay} /> : <FontAwesomeIcon icon={faPause} />}
+                        <FontAwesomeIcon icon={playMS ? faPlay : faPause} />
                     </div>
                 </>
             ) : null}

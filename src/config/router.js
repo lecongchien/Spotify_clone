@@ -7,7 +7,6 @@ const routes = {
     podcast: '/collection/Podcast',
     artists: '/collection/artists',
     album: '/collection/album',
-    // albums: '/album/',
 };
 
 export default routes;

@@ -83,6 +83,8 @@ function BoxcardMusic({ NameAlbum = false }) {
                                                 onMouseOver={() => setAlbumsID(element.id)}
                                                 onClick={() => setAlbumsID(element.id)}
                                                 container
+                                                hover
+                                                cricle_Green_Play
                                                 image={element.images[0].url}
                                                 name={element.name}
                                                 date={element.release_date.slice(0, 4) + ' ' + element.artists[0].name}

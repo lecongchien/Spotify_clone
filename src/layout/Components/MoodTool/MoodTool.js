@@ -1,24 +1,18 @@
 import classNames from 'classnames/bind';
 import styles from './MoodTool.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faHeart,
-    faImages,
-    faPause,
-    faPlay,
-    faSatelliteDish,
-    faVolumeHigh,
-    faVolumeXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faImages, faPause, faPlay, faVolumeHigh, faVolumeLow, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import { Devides, HeartLips, LoopMusic, Mix, Next, PlaylistDelay, Prev, WatchPlay } from '~/assets/Icon/Icon';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { DataIdSong } from '~/App';
+import { Howl } from 'howler';
+import { DataIdSong, NumberContext, PlayAndPause } from '~/App';
 import Tippy from '@tippyjs/react';
 const cx = classNames.bind(styles);
 
 function MoodTool() {
     const [IdData, setIDdata] = useState('');
     const data = useContext(DataIdSong);
+    const Play = useContext(PlayAndPause);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -27,27 +21,61 @@ function MoodTool() {
     const [inputRange, setInputRange] = useState(0);
     const [muted, setMuted] = useState(false);
     const [initialValue, setInitialValue] = useState(70);
+    const [count, setCount] = useState(0);
+    const [nameSong, setNameSong] = useState('');
+    const [loop, setLoop] = useState(false);
+    const [mix, setMix] = useState(false);
+    const [random, setRandom] = useState(false);
+    const [songs, setSongs] = useState();
 
+    useEffect(() => {
+        if (count) {
+            console.log(count);
+        }
+    }, [count]);
     const togglePlayPause = () => {
         if (isPlaying) {
             audioRef.current.pause();
         } else {
-            audioRef.current.play();
+            IdData === null ? audioRef.current.pause() : audioRef.current.play();
+            audioRef.current.addEventListener('ended', playNextSong);
         }
         setIsPlaying(!isPlaying);
     };
 
+    useEffect(() => {
+        if (IdData) {
+            audioRef.current.play();
+            audioRef.current.addEventListener('ended', playNextSong);
+            setIsPlaying(true);
+        } else {
+            audioRef.current.pause();
+            setIsPlaying(false);
+        }
+    }, [IdData]);
+
+    useEffect(() => {
+        if (!Play.setPlayAndpause) {
+            audioRef.current.pause();
+        } else {
+            IdData === null ? audioRef.current.pause() : audioRef.current.play();
+        }
+    }, [Play]);
+
     const audioRef = useRef(null);
     const volumeRef = useRef(null);
     const reWidMusic = useRef(null);
+    const prevDataRef = useRef(null);
 
     useEffect(() => {
-        if (data) {
-            setIDdata(data.setIdPlaySong[0]?.preview_url);
+        if (data !== prevDataRef.current) {
+            prevDataRef.current = data;
+            setIDdata(data.setIdPlaySong[0] ? data.setIdPlaySong[0]?.preview_url : data.setIdPlaySong);
+            // setCount(data?.setIdPlaySong[0]?.track_number - 1);
         }
     }, [data]);
-
-    const handleTimeUpdate = (ease) => {
+    console.log(data);
+    const handleTimeUpdate = () => {
         setCurrentTime(audioRef.current.currentTime);
     };
 
@@ -59,8 +87,7 @@ function MoodTool() {
         const sliderValue = e.target.value;
         audioRef.current.volume = volumeRef.current.value / 100;
         setChangeValue(sliderValue);
-        // setHandeVolumn(sliderValue);
-        console.log((audioRef.current.volume = volumeRef.current.value / 100));
+        audioRef.current.volume === 0 ? setMuted(true) : setMuted(false);
     };
 
     useEffect(() => {
@@ -71,8 +98,8 @@ function MoodTool() {
 
     const handleSliderChange = (e) => {
         const sliderValue = e.target.value;
-        const seektime = (duration / 100) * sliderValue;
-        audioRef.current.currentTime = seektime;
+        const seekTime = (duration / 100) * sliderValue;
+        audioRef.current.currentTime = seekTime;
         setRewind(sliderValue);
     };
 
@@ -81,11 +108,9 @@ function MoodTool() {
         const seconds = Math.floor(time % 60);
         return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
-
-    //tắt âm thanh
+    //Nút điều chỉnh âm lượng hoặc tắt bài hát trong album
     const muteds = () => {
         setMuted(!muted);
-
         if (!muted) {
             setInitialValue(changeValue);
             audioRef.current.volume = 0;
@@ -96,32 +121,123 @@ function MoodTool() {
         }
     };
 
+    //Các nút chức năng sử lý prev và next các bài hát trong album
+    const handlePrevious = () => {
+        if (count > 0) {
+            setCount(count - 1);
+        }
+    };
+
+    const handleNext = () => {
+        if (count < data.setIdPlaySong[1]?.tracks.items.length - 1) {
+            setCount(count + 1);
+            console.log(count, count + 1);
+        }
+    };
+
+    useEffect(() => {
+        if (data.setIdPlaySong && data.setIdPlaySong[1]?.tracks.items.length > 0) {
+            setIDdata(data?.setIdPlaySong[1]?.tracks?.items[count]?.preview_url);
+            setNameSong(data?.setIdPlaySong[1]?.tracks?.items[count]?.name);
+        } else if (data.setIdPlaySong && !data.setIdPlaySong[1]) {
+            setIDdata(data?.setIdPlaySong[0]?.preview_url);
+            setNameSong(data?.setIdPlaySong[0]?.name);
+        }
+    }, [count, data.setIdPlaySong]);
+
+    //Xử lý logic khi nghe xong bài hát lập tức tự chuyển sang bài hát tiếp theo
+    useEffect(() => {
+        audioRef.current.addEventListener('ended', playNextSong);
+        return () => {
+            audioRef.current.removeEventListener('ended', playNextSong);
+        };
+    }, [loop]);
+
+    const playNextSong = () => {
+        if (count === data?.setIdPlaySong[1]?.tracks.items.length - 1) {
+            setCount(0);
+        } else {
+            setCount(count + 1);
+        }
+    };
+
+    //Kích hoạt chế độ lặp lại bài hát
+    const toggleLoop = () => {
+        setLoop(!loop);
+    };
+
+    useEffect(() => {
+        audioRef.current.loop = loop;
+    }, [loop]);
+
+    const mixsongs = () => {
+        setMix(!mix);
+        if (songs.length > 0) {
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            setCount(randomIndex);
+        }
+    };
+
+    useEffect(() => {
+        if (data.setIdPlaySong && data.setIdPlaySong[1]?.tracks.items.length > 0) {
+            const songList = [...data.setIdPlaySong[1]?.tracks.items];
+            shuffleArray(songList);
+            setSongs(songList);
+        }
+    }, [data.setIdPlaySong]);
+
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    };
+
     return (
         <div className={cx('moodTool')}>
             <div className={cx('content_player')}>
                 <div className={cx('music_information')}>
-                    <div className={cx('image')}>
-                        <img src={data?.setIdPlaySong[1]?.images[2]?.url} alt="" />
-                    </div>
-                    <div className={cx('title')}>
-                        <a href="" className={cx('title_name_song')}>
-                            {data?.setIdPlaySong[0]?.name}
-                        </a>
-                        <a href="" alt="">
-                            {data?.setIdPlaySong[0]?.artists[0]?.name}
-                        </a>
-                    </div>
-                    <HeartLips />
-                    <FontAwesomeIcon icon={faImages} />
+                    <NumberContext.Consumer>
+                        {(context) => {
+                            context.number(count);
+                        }}
+                    </NumberContext.Consumer>
+                    {data.setIdPlaySong && (
+                        <>
+                            <div className={cx('image')}>
+                                <img
+                                    src={
+                                        data?.setIdPlaySong[1]?.images[2]?.url ||
+                                        data?.setIdPlaySong[0]?.album?.images[2]?.url
+                                    }
+                                    alt=""
+                                />
+                            </div>
+                            <div className={cx('title')}>
+                                <a href="" className={cx('title_name_song')}>
+                                    {nameSong ? nameSong : data?.setIdPlaySong[0]?.name}
+                                </a>
+                                <a href="" alt="">
+                                    {data?.setIdPlaySong[0]?.artists[0]?.name}
+                                </a>
+                            </div>
+                            <HeartLips />
+                            <FontAwesomeIcon icon={faImages} />
+                        </>
+                    )}
                 </div>
                 <div className={cx('function_seet_music')}>
                     <div className={cx('music-player')}>
                         <div className={cx('controls')}>
                             <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Bật trộn bài">
-                                <button className={cx('Mix')}>{<Mix />}</button>
+                                <button onClick={mixsongs} className={cx('Mix')}>
+                                    {<Mix />}
+                                </button>
                             </Tippy>
                             <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Trước">
-                                <button className={cx('prev')}>{<Prev />}</button>
+                                <button onClick={handlePrevious} className={cx('prev')}>
+                                    {<Prev />}
+                                </button>
                             </Tippy>
                             <Tippy
                                 className={cx('tippy-title')}
@@ -130,20 +246,26 @@ function MoodTool() {
                                 content={!isPlaying ? 'Phát' : 'Tạm dừng'}
                             >
                                 <button className={cx('play-btn')} onClick={togglePlayPause}>
-                                    <FontAwesomeIcon icon={!isPlaying ? faPlay : faPause} />
+                                    <FontAwesomeIcon
+                                        icon={!isPlaying || (!Play.setPlayAndpause && IdData) ? faPlay : faPause}
+                                    />
                                 </button>
                             </Tippy>
                             <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Sau">
-                                <button className={cx('prev')}>{<Next />}</button>
+                                <button onClick={handleNext} className={cx('prev')}>
+                                    {<Next />}
+                                </button>
                             </Tippy>
 
                             <Tippy
                                 className={cx('tippy-title')}
                                 arrow={false}
                                 placement={'top'}
-                                content="Kích hoạt chế độ lặp lại"
+                                content={!loop ? 'Bật chế độ lặp lại một bài' : 'Hủy kích hoạt chế độ lặp lại'}
                             >
-                                <button className={cx('prev')}>{<LoopMusic />}</button>
+                                <button onClick={toggleLoop} className={cx('loop')}>
+                                    <p style={{ color: !loop ? 'gray' : '#1db954' }}>{<LoopMusic />}</p>
+                                </button>
                             </Tippy>
                         </div>
 
@@ -165,7 +287,7 @@ function MoodTool() {
                                     min="0"
                                     max="100"
                                     step="1"
-                                    value={rewind}
+                                    value={rewind ? rewind : 0}
                                     className={cx('spotify-slider')}
                                 />
                                 <span style={{ width: `calc(${inputRange}%  + 0.5px)` }}></span>
@@ -208,22 +330,26 @@ function MoodTool() {
                             content={!muted ? 'Tắt tiếng' : 'Bật tiếng'}
                         >
                             <button onClick={() => muteds()}>
-                                <FontAwesomeIcon icon={!muted ? faVolumeHigh : faVolumeXmark} />
+                                <FontAwesomeIcon
+                                    icon={!muted ? (changeValue > 50 ? faVolumeHigh : faVolumeLow) : faVolumeXmark}
+                                />
                             </button>
                         </Tippy>
-                        <div className={cx('range_run')} style={{ margin: '0 0 0 10px' }}>
-                            <input
-                                style={{ width: '90px' }}
-                                ref={volumeRef}
-                                onChange={handleVolumeChange}
-                                type="range"
-                                min="0"
-                                max="100"
-                                step="1"
-                                value={changeValue}
-                                className={cx('spotify-slider')}
-                            />
-                            <span style={{ width: `calc(${changeValue}%  + 0.5px)` }}></span>
+                        <div className={cx('input_range')}>
+                            <div className={cx('range_run')}>
+                                <input
+                                    style={{ width: '90px' }}
+                                    ref={volumeRef}
+                                    onChange={handleVolumeChange}
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    step="1"
+                                    value={changeValue}
+                                    className={cx('spotify-slider')}
+                                />
+                                <span style={{ width: `calc(${changeValue}%  + 0.5px)` }}></span>
+                            </div>
                         </div>
                     </div>
                 </div>

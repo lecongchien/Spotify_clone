@@ -1,5 +1,7 @@
 import classNames from 'classnames/bind';
 import style from './ReusableBox.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(style);
 function ReusableBox({
@@ -10,6 +12,7 @@ function ReusableBox({
     date = false,
     TopResults = false,
     hover = false,
+    cricle_Green_Play = false,
     children,
     ...passProps
 }) {
@@ -17,6 +20,7 @@ function ReusableBox({
         container,
         TopResults,
         hover,
+        cricle_Green_Play,
     });
 
     const props = {
@@ -32,6 +36,11 @@ function ReusableBox({
                     </div>
                     <h3>{name}</h3>
                     <p>{date}</p>
+                    {cricle_Green_Play && (
+                        <button className={cx('cricle_Green_Play')}>
+                            <FontAwesomeIcon icon={faPlay} />
+                        </button>
+                    )}
                 </>
             )}
             {TopResults && children}

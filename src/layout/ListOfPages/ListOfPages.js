@@ -13,20 +13,20 @@ import Playsongs from './Playsongs/Playsongs';
 const cx = classNames.bind(styles);
 
 function ListOfPages() {
-    const { AlbumsId } = useParams();
+    const { ID } = useParams(null);
     const [component, setComponet] = useState([null]);
     const theme = useContext(ThemeContext);
 
     const fetchProducts = useCallback(async () => {
         const reload = await axios
-            .get(`https://api.spotify.com/v1/albums/${AlbumsId}`, theme.artistsParmester)
+            .get(`https://api.spotify.com/v1/albums/${ID}`, theme.artistsParmester)
             .then((response) => {
                 setComponet(response.data);
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, [AlbumsId, theme]);
+    }, [ID, theme]);
 
     useEffect(() => {
         fetchProducts();
@@ -47,12 +47,12 @@ function ListOfPages() {
         hoursAndMinutes: [Math.floor(component.popularity / 60), component.popularity % 60],
         copyrights: [
             {
-                name: component.copyrights && component.copyrights[0].text,
-                type: component.copyrights && component.copyrights[0].type,
+                name: component?.copyrights?.[0]?.text,
+                type: component?.copyrights?.[0]?.type,
             },
             {
-                name: component.copyrights && component.copyrights[1].text,
-                type: component.copyrights && component.copyrights[1].type,
+                name: component?.copyrights?.[1]?.text,
+                type: component?.copyrights?.[1]?.type,
             },
         ],
         releaseYearL: {
@@ -127,7 +127,7 @@ function ListOfPages() {
             <div
                 style={
                     color && {
-                        backgroundImage: `linear-gradient(315deg, rgb(93 93 93) 0%, rgb(${color[0]}, ${color[1]}, ${color[2]}) 74%)`,
+                        backgroundImage: `linear-gradient(#3f3f3f 0, rgb(${color[0]}, ${color[1]}, ${color[2]}) 100%)`,
                         boxShadow: `
                         0px 55px 124px 28px rgb(${color[0]} ${color[1]} ${color[2]} / 34%)`,
                     }

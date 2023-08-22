@@ -8,14 +8,17 @@ export const AlbumsContext = createContext();
 export const Setsize = createContext();
 export const Searchs = createContext();
 export const DataIdSong = createContext();
-
+export const PlayAndPause = createContext();
+export const NumberContext = createContext();
 function App() {
     const [state, setState] = useState('');
     const [albumState, setAlbumsStates] = useState('');
     const [SizeApp, setSizeApps] = useState('');
     const [searchItems, setSearchItems] = useState('');
     const [dataSong, setdataSong] = useState('');
-
+    const [togglePlay, setTogglePlay] = useState();
+    const [handleNumber, setHandleNumber] = useState('');
+    console.log(handleNumber);
     return (
         <MContext.Provider
             value={{
@@ -43,36 +46,46 @@ function App() {
                             }}
                         >
                             <DataIdSong.Provider value={{ setIdPlaySong: dataSong, ID: (value) => setdataSong(value) }}>
-                                <Router>
-                                    <div className="App">
-                                        <Routes>
-                                            {publicRoutes.map((router, index) => {
-                                                const Page = router.component;
-                                                let Layout = DefaultLayout;
-                                                if (router.layout) {
-                                                    Layout = router.layout;
-                                                } else if (router.layout === null) {
-                                                    Layout = Fragment;
-                                                }
-                                                return (
-                                                    <Route
-                                                        key={index}
-                                                        path={
-                                                            router.path === '/albums/:AlbumsId'
-                                                                ? '/albums/:AlbumsId'
-                                                                : router.path
+                                <PlayAndPause.Provider
+                                    value={{ setPlayAndpause: togglePlay, Toggle: (value) => setTogglePlay(value) }}
+                                >
+                                    <NumberContext.Provider
+                                        value={{
+                                            setNb: handleNumber,
+                                            number: (value) => {
+                                                setHandleNumber(value);
+                                                // console.log(value, 'value');
+                                            },
+                                        }}
+                                    >
+                                        <Router>
+                                            <div className="App">
+                                                <Routes>
+                                                    {publicRoutes.map((router, index) => {
+                                                        const Page = router.component;
+                                                        let Layout = DefaultLayout;
+                                                        if (router.layout) {
+                                                            Layout = router.layout;
+                                                        } else if (router.layout === null) {
+                                                            Layout = Fragment;
                                                         }
-                                                        element={
-                                                            <Layout>
-                                                                <Page />
-                                                            </Layout>
-                                                        }
-                                                    />
-                                                );
-                                            })}
-                                        </Routes>
-                                    </div>
-                                </Router>
+                                                        return (
+                                                            <Route
+                                                                key={index}
+                                                                path={router.path}
+                                                                element={
+                                                                    <Layout>
+                                                                        <Page />
+                                                                    </Layout>
+                                                                }
+                                                            />
+                                                        );
+                                                    })}
+                                                </Routes>
+                                            </div>
+                                        </Router>
+                                    </NumberContext.Provider>
+                                </PlayAndPause.Provider>
                             </DataIdSong.Provider>
                         </Searchs.Provider>
                     </Setsize.Provider>

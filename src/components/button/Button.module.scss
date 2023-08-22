@@ -163,3 +163,15 @@
         background-color: #2f2e2e;
     }
 }
+.itemsong {
+    width: 70%;
+    height: 100%;
+}
+.hover {
+    transition: 150ms ease-in-out;
+    border-radius: 5px;
+    &:hover {
+        transition: 150ms ease-in-out;
+        background-color: #a6a6a667;
+    }
+}
