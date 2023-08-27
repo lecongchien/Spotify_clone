@@ -5,13 +5,16 @@ import { faImages, faPause, faPlay, faVolumeHigh, faVolumeLow, faVolumeXmark } f
 import { Devides, HeartLips, LoopMusic, Mix, Next, PlaylistDelay, Prev, WatchPlay } from '~/assets/Icon/Icon';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Howl } from 'howler';
-import { DataIdSong, NumberContext, PlayAndPause } from '~/App';
+import { useDispatch } from 'react-redux';
+import { setData } from '~/redux/actions';
+import { DataIdSong, NumberContext, PlayAndPause, Toggle } from '~/App';
 import Tippy from '@tippyjs/react';
 const cx = classNames.bind(styles);
 
 function MoodTool() {
     const [IdData, setIDdata] = useState('');
     const data = useContext(DataIdSong);
+    // console.log(data)
     const Play = useContext(PlayAndPause);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
@@ -27,12 +30,9 @@ function MoodTool() {
     const [mix, setMix] = useState(false);
     const [random, setRandom] = useState(false);
     const [songs, setSongs] = useState();
-
-    useEffect(() => {
-        if (count) {
-            console.log(count);
-        }
-    }, [count]);
+    const handleToggle = useContext(Toggle);
+    //redux
+    const dispatch = useDispatch();
     const togglePlayPause = () => {
         if (isPlaying) {
             audioRef.current.pause();
@@ -47,6 +47,7 @@ function MoodTool() {
         if (IdData) {
             audioRef.current.play();
             audioRef.current.addEventListener('ended', playNextSong);
+            dispatch(setData([count, false]));
             setIsPlaying(true);
         } else {
             audioRef.current.pause();
@@ -71,10 +72,10 @@ function MoodTool() {
         if (data !== prevDataRef.current) {
             prevDataRef.current = data;
             setIDdata(data.setIdPlaySong[0] ? data.setIdPlaySong[0]?.preview_url : data.setIdPlaySong);
-            // setCount(data?.setIdPlaySong[0]?.track_number - 1);
+            setCount(data?.setIdPlaySong[0]?.track_number - 1);
         }
     }, [data]);
-    console.log(data);
+
     const handleTimeUpdate = () => {
         setCurrentTime(audioRef.current.currentTime);
     };
@@ -125,13 +126,14 @@ function MoodTool() {
     const handlePrevious = () => {
         if (count > 0) {
             setCount(count - 1);
+            dispatch(setData([count - 1, false]));
         }
     };
 
     const handleNext = () => {
         if (count < data.setIdPlaySong[1]?.tracks.items.length - 1) {
             setCount(count + 1);
-            console.log(count, count + 1);
+            dispatch(setData([count + 1, false]));
         }
     };
 
@@ -197,11 +199,6 @@ function MoodTool() {
         <div className={cx('moodTool')}>
             <div className={cx('content_player')}>
                 <div className={cx('music_information')}>
-                    <NumberContext.Consumer>
-                        {(context) => {
-                            context.number(count);
-                        }}
-                    </NumberContext.Consumer>
                     {data.setIdPlaySong && (
                         <>
                             <div className={cx('image')}>

@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './ListBox.module.scss';
 import Button from '~/components/button';
 import { ThemeContext } from '~/components/themeContext/themeContext';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +19,11 @@ function ListBox() {
     const [toggle, setToggle] = useState('');
     const [images, setImages] = useState('');
     const [color, setColor] = useState(null);
+    const [timeOfDay, setTimeOfDay] = useState('');
     const [isHovered, setIsHovered] = useState(false);
+    const [error, setError] = useState();
+    const hadleError = useRef();
+    console.log(error);
     useEffect(() => {
         setTimeout(() => {
             const reload = async () => {
@@ -44,6 +48,7 @@ function ListBox() {
     }, [theme]);
 
     const play = (e, i) => {
+        setError(e.preview_url);
         const updatedRecommendations = recommendations.map((item, index) => {
             const run = [item];
             if (index === i) {
@@ -78,6 +83,32 @@ function ListBox() {
         };
     }, [images]);
 
+    useEffect(() => {
+        const currentHour = new Date().getHours();
+        if (currentHour >= 6 && currentHour < 12) {
+            setTimeOfDay('Chào buổi sáng');
+        } else if (currentHour >= 12 && currentHour <= 18) {
+            setTimeOfDay('Chào buổi chiều');
+        } else {
+            setTimeOfDay('Chào buổi tối');
+        }
+    }, []);
+
+    useEffect(() => {
+        const timerID = setTimeout(() => {
+            if (error === null) {
+                hadleError.current.style.opacity = 1;
+                hadleError.current.style.visibility = 'visible';
+                hadleError.current.style.transform = 'translateX(0px)';
+            } else {
+                hadleError.current.style.opacity = 0;
+                hadleError.current.style.visibility = 'hidden';
+                hadleError.current.style.transform = 'translateX(100px)';
+            }
+        }, 1000);
+        return () => clearTimeout(timerID);
+    }, [error, hadleError]);
+
     return (
         <div
             className={cx('List-Box')}
@@ -92,8 +123,7 @@ function ListBox() {
             }
         >
             <div className={cx('header')}>
-                <p>Chào buổi tối</p>
-                <Button to>Hiện tất cả</Button>
+                <p>{timeOfDay}</p>
             </div>
             <PlayAndPause.Consumer>
                 {(context) => {
@@ -107,7 +137,9 @@ function ListBox() {
                         context.ID(recome);
                     }}
                 </DataIdSong.Consumer>
-
+                <div ref={hadleError} className={cx('error')}>
+                    <p>Please choose another song</p>
+                </div>
                 <div className={cx('song_items')}>
                     {recommendations &&
                         recommendations.map((e, i) => {

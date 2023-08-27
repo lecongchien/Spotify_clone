@@ -9,7 +9,6 @@
     width: 100%;
 }
 .contains {
-    width: 100%;
     background-color: #111111;
     padding-bottom: 120px;
     height: 100vh;
@@ -23,7 +22,7 @@
         }
     }
     &::-webkit-scrollbar {
-        width: 18px;
+        width: 10px;
     }
     /* Track */
     &::-webkit-scrollbar-track {

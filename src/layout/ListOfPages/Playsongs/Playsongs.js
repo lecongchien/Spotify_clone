@@ -4,10 +4,12 @@ import { DataIdSong, NumberContext, PlayAndPause } from '~/App';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Explicit, HeartLips } from '~/assets/Icon/Icon';
+import { useSelector } from 'react-redux';
 import { ThemeContext } from '~/components/themeContext/themeContext';
 import Beat from '~/assets/image/play.gif';
 import { useCallback, useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+
 const cx = classNames.bind(styles);
 
 function Playsongs({ component }) {
@@ -15,8 +17,11 @@ function Playsongs({ component }) {
     const [playStates, setPlayStates] = useState([]);
     const [Idsong, setIdSong] = useState([]);
     const [toggle, setToggle] = useState('');
+    const [handleToggle, sethandleToggle] = useState(false);
 
+    const data = useSelector((state) => state.data);
     const togglePlay = (index) => {
+        sethandleToggle(index);
         const newPlayStates = component.tracks?.items.map((state, i) => {
             const run = [state, component];
             if (index === i) {
@@ -28,9 +33,9 @@ function Playsongs({ component }) {
                 return { ...state, isPlaying: false }; // Đảo ngược trạng thái play/pause
             }
         });
-
         setPlayStates(newPlayStates);
     };
+    console.log(data);
 
     const handleMouseOver = (index) => {
         const changeMouse = component.tracks?.items.map((e, i) => {
@@ -54,7 +59,7 @@ function Playsongs({ component }) {
                 const seconds = Math.floor(milliseconds / 1000);
                 const minutes = Math.floor(seconds / 60);
                 const remainingSeconds = seconds % 60;
-                // console.log(element.preview_url);
+                const handle = playStates[index] && playStates[index]?.track_number === data[0] + 1;
                 return (
                     <>
                         <DataIdSong.Consumer>
@@ -77,17 +82,19 @@ function Playsongs({ component }) {
                                     <>
                                         <FontAwesomeIcon
                                             onClick={() => togglePlay(index)}
-                                            icon={playStates[index]?.isPlaying ? faPause : faPlay}
+                                            icon={handle ? faPause : faPlay}
                                         />
                                     </>
                                 ) : (
-                                    <>{!playStates[index]?.isPlaying ? <>{index + 1}</> : <img src={Beat} />}</>
+                                    <>{!handle ? <>{index + 1}</> : <img src={Beat} />}</>
                                 )}
                             </td>
                             <td>
                                 <span className={cx('title')}>
                                     <a
-                                        style={{ color: playStates[index]?.isPlaying ? '#1ed760' : '#ccc' }}
+                                        style={{
+                                            color: handle ? '#1ed760' : '#ccc',
+                                        }}
                                         href=""
                                         className={cx('title_name_song')}
                                     >
