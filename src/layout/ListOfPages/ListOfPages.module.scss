@@ -1,6 +1,29 @@
+.content_context {
+    overflow-y: scroll;
+    height: 100vh;
+    padding-bottom: 120px;
+    &:hover {
+        &::-webkit-scrollbar-thumb {
+            visibility: visible;
+            background-color: #a1a1a1;
+        }
+    }
+    &::-webkit-scrollbar {
+        width: 8px;
+        display: none;
+    }
+    /* Track */
+    &::-webkit-scrollbar-track {
+        display: none;
+    }
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        visibility: hidden;
+    }
+}
+
 .box_content_music {
-    margin-top: -66px;
-    padding: 66px 20px 20px;
+    padding: 98px 20px 20px;
 }
 .container {
     padding: 0 20px;

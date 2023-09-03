@@ -23,7 +23,6 @@ function ListBox() {
     const [isHovered, setIsHovered] = useState(false);
     const [error, setError] = useState();
     const hadleError = useRef();
-    console.log(error);
     useEffect(() => {
         setTimeout(() => {
             const reload = async () => {
@@ -128,7 +127,6 @@ function ListBox() {
             <PlayAndPause.Consumer>
                 {(context) => {
                     context.Toggle(toggle);
-                    console.log(context);
                 }}
             </PlayAndPause.Consumer>
             <div className={cx('container')}>

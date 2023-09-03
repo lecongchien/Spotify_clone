@@ -1,16 +1,15 @@
 .HI_THERE {
-    display: grid;
-    grid-template-columns: 1.7fr 2fr;
+    display: flex;
 }
 .container {
     overflow-y: hidden;
+    flex: 0 0 75%;
 }
 .navbar {
-    width: 100%;
+    flex: 0 0 25%;
 }
 .contains {
     background-color: #111111;
-    padding-bottom: 120px;
     height: 100vh;
     overflow: overlay;
     margin: 7px;
@@ -23,6 +22,7 @@
     }
     &::-webkit-scrollbar {
         width: 10px;
+        display: none;
     }
     /* Track */
     &::-webkit-scrollbar-track {

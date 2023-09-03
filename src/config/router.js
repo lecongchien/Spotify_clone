@@ -7,6 +7,9 @@ const routes = {
     podcast: '/collection/Podcast',
     artists: '/collection/artists',
     album: '/collection/album',
+    Login: '/login',
+    Register: '/register',
+    Loader: '/loader',
 };
 
 export default routes;

@@ -35,7 +35,6 @@ function Playsongs({ component }) {
         });
         setPlayStates(newPlayStates);
     };
-    console.log(data);
 
     const handleMouseOver = (index) => {
         const changeMouse = component.tracks?.items.map((e, i) => {
@@ -98,9 +97,6 @@ function Playsongs({ component }) {
                                         href=""
                                         className={cx('title_name_song')}
                                     >
-                                        {/* {logNumberSong.setNb === element.preview_url && <>
-                                        
-                                        </>} */}
                                         {element.name}
                                     </a>
                                 </span>

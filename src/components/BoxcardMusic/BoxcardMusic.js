@@ -7,8 +7,6 @@ import ReusableBox from '../ReusableBox';
 import { ThemeContext } from '../themeContext/themeContext';
 import Button from '../button/Button';
 import axios from 'axios';
-import { Search } from '~/App';
-import Run from '~/Routes/Routes';
 import { useLocation, useParams } from 'react-router-dom';
 import TopResults from '../TopResults/TopResults';
 const cx = classNames.bind(styles);
@@ -18,12 +16,12 @@ function BoxcardMusic({ NameAlbum = false }) {
     const [albumsID, setAlbumsID] = useState();
     const [ai, setai] = useState([]);
     const theme = useContext(ThemeContext);
-    const location = useParams();
     const [Genres, setGenres] = useState([]);
     const locations = useLocation();
     const allLocation = locations.pathname;
     const setIdAlbum = allLocation.split('/');
     const IdAlBum = setIdAlbum[2];
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         let IdTrack = '';
@@ -54,69 +52,69 @@ function BoxcardMusic({ NameAlbum = false }) {
     }, [fetchProducts]);
     return (
         <>
-            {albums == '' ? null : <TopResults />}
-            <div className={cx('search')}>
-                {albums == '' ? null : (
-                    <div className={cx('title')}>{NameAlbum ? 'Album khác của' + ' ' + NameAlbum : 'Album'}</div>
-                )}
+            <div className={cx('contain_items')}>
+                {albums == '' ? null : <TopResults />}
+                <div className={cx('search')}>
+                    {albums == '' ? null : <div className={cx('title')}>{NameAlbum ? 'Album khác của' + ' ' + NameAlbum : 'Album'}</div>}
 
-                <MContext.Consumer>
-                    {(context) => {
-                        setAlbums(context.state);
-                    }}
-                </MContext.Consumer>
+                    <MContext.Consumer>
+                        {(context) => {
+                            setAlbums(context.state);
+                        }}
+                    </MContext.Consumer>
 
-                <AlbumsContext.Consumer>
-                    {(context) => {
-                        context.setAlbum(ai);
-                    }}
-                </AlbumsContext.Consumer>
+                    <AlbumsContext.Consumer>
+                        {(context) => {
+                            context.setAlbum(ai);
+                        }}
+                    </AlbumsContext.Consumer>
 
-                <div className={cx('boxmudic')}>
-                    {albums === '' ? null : (
-                        <>
-                            {albums.slice(0, 10).map((element, index) => {
+                    <div className={cx('boxmudic')}>
+                        {albums === '' ? null : (
+                            <>
+                                {albums.slice(0, 10).map((element, index) => {
+                                    return (
+                                        <>
+                                            <Button to={`/albums/${element.id}`} key={index}>
+                                                <ReusableBox
+                                                    onMouseOver={() => setAlbumsID(element.id)}
+                                                    onClick={() => setAlbumsID(element.id)}
+                                                    container
+                                                    hover
+                                                    cricle_Green_Play
+                                                    image={element.images[0].url}
+                                                    name={element.name}
+                                                    date={element.release_date.slice(0, 4) + ' ' + element.artists[0].name}
+                                                ></ReusableBox>
+                                            </Button>
+                                        </>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </div>
+
+                    {albums == '' && !(allLocation === `/albums/${IdAlBum}`) ? (
+                        <div className={cx('content_genres')}>
+                            {Genres.map((element, index) => {
+                                const randomcolor = Math.floor(Math.random() * 999999);
+                                const random = randomcolor > 100000 && randomcolor;
+                                const color = {
+                                    backgroundColor: `#${random}`,
+                                };
+
                                 return (
-                                    <>
-                                        <Button to={`/albums/${element.id}`} key={index}>
-                                            <ReusableBox
-                                                onMouseOver={() => setAlbumsID(element.id)}
-                                                onClick={() => setAlbumsID(element.id)}
-                                                container
-                                                hover
-                                                cricle_Green_Play
-                                                image={element.images[0].url}
-                                                name={element.name}
-                                                date={element.release_date.slice(0, 4) + ' ' + element.artists[0].name}
-                                            ></ReusableBox>
-                                        </Button>
-                                    </>
+                                    <div style={color} className={cx('genres')}>
+                                        <h2>{element.artists[0].name}</h2>
+                                        <div className={cx('images')}>
+                                            <img src={element.album.images[1].url} />
+                                        </div>
+                                    </div>
                                 );
                             })}
-                        </>
-                    )}
+                        </div>
+                    ) : null}
                 </div>
-
-                {albums == '' && !(allLocation === `/albums/${IdAlBum}`) ? (
-                    <div className={cx('content_genres')}>
-                        {Genres.map((element, index) => {
-                            const randomcolor = Math.floor(Math.random() * 999999);
-                            const random = randomcolor > 100000 && randomcolor;
-                            const color = {
-                                backgroundColor: `#${random}`,
-                            };
-
-                            return (
-                                <div style={color} className={cx('genres')}>
-                                    <h2>{element.artists[0].name}</h2>
-                                    <div className={cx('images')}>
-                                        <img src={element.album.images[1].url} />
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                ) : null}
             </div>
         </>
     );

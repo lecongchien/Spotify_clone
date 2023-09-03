@@ -58,6 +58,7 @@
     font-weight: bold;
     transform: scale(0.98);
     transition: 50ms ease-out;
+    white-space: nowrap;
     &:hover {
         transform: scale(1);
     }
@@ -98,6 +99,7 @@
 }
 .username {
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .PlayBigGreen {

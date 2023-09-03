@@ -3,24 +3,28 @@ import styles from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '~/components/button/Button';
 import { faArrowUpRightFromSquare, faChevronLeft, faChevronRight, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SearchItem from '~/pages/Search/SearchItem';
 import CollectionItem from '../CollectionItem';
 import config from '~/config';
 import { CricleDown } from '~/assets/Icon/Icon';
+import { LoginAndRegister } from '~/App';
+import { signOut } from 'firebase/auth';
+import { databate } from '~/components/PasswordLoginWithFirebase/FireBaseConfig';
 
 const cx = classNames.bind(styles);
 
 function Header() {
     const [changes, setChanges] = useState(false);
-    const run = window.location.href.split('/');
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const location = useLocation();
     const allLocation = location.pathname;
     const setIdAlbum = allLocation.split('/');
     const IdAlBum = setIdAlbum[2];
-
+    const Logins = useContext(LoginAndRegister);
+    const history = useNavigate();
     const utilityBox = [
         {
             id: 1,
@@ -63,15 +67,32 @@ function Header() {
             text: 'Đăng xuất',
             icon: '',
             to: '/',
+            onclick: () => {
+                setIsLoggingOut(true);
+                signOut(databate)
+                    .then((val) => {
+                        setTimeout(() => {
+                            setIsLoggingOut(false);
+                            history('/login');
+                            setTimeout(() => {
+                                history('/');
+                                setChanges(false);
+                            }, 500);
+                        }, 0);
+                    })
+                    .catch((error) => {
+                        console.log('Đã xảy ra lỗi khi đăng xuất:', error);
+                    });
+            },
         },
     ];
-
     return (
         <div className={cx('header')}>
             <div className={cx('container')}>
                 <div className={cx('left-sidebar')}>
                     <Button button icon={<FontAwesomeIcon icon={faChevronLeft} />} />
                     <Button button icon={<FontAwesomeIcon icon={faChevronRight} />} />
+
                     {allLocation === '/' ? null : (
                         <>
                             {!(
@@ -80,7 +101,9 @@ function Header() {
                                 allLocation === config.routes.playlist ||
                                 allLocation === config.routes.album ||
                                 allLocation === config.routes.podcast ||
-                                allLocation === config.routes.artists
+                                allLocation === config.routes.artists ||
+                                allLocation === config.routes.Login ||
+                                allLocation === config.routes.Register
                             ) ? (
                                 <SearchItem />
                             ) : null}
@@ -88,29 +111,42 @@ function Header() {
                     )}
                 </div>
                 <div className={cx('right-sidebar')}>
-                    {allLocation === config.routes.search ||
-                        allLocation === config.routes.playlist ||
-                        allLocation === config.routes.album ||
-                        allLocation === config.routes.podcast ||
-                        allLocation === config.routes.artists || <Button button active title={'Nâng cấp'} />}
-                    <Button settingapp title={'Cài đặt ứng dụng'} icon={<CricleDown />} />
-                    <Button user icon={<FontAwesomeIcon icon={faUser} />} onClick={() => setChanges(!changes)} />
-                    {changes ? (
-                        <div className={cx('utility_box')}>
-                            <ul>
-                                {utilityBox.map((element) => {
-                                    return (
-                                        <li>
-                                            <Button to={element.to}>
-                                                {element.text}
-                                                {element.icon}
-                                            </Button>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
+                    {Logins.login ? (
+                        <>
+                            {allLocation === config.routes.search ||
+                                allLocation === config.routes.playlist ||
+                                allLocation === config.routes.album ||
+                                allLocation === config.routes.podcast ||
+                                allLocation === config.routes.artists || <Button button active title={'Nâng cấp'} />}
+                            <Button settingapp title={'Cài đặt ứng dụng'} icon={<CricleDown />} />
+                            <Button user icon={<FontAwesomeIcon icon={faUser} />} onClick={() => setChanges(!changes)} />
+                            {changes ? (
+                                <div className={cx('utility_box')}>
+                                    <ul>
+                                        {utilityBox.map((element) => {
+                                            return (
+                                                <li>
+                                                    <Button to={element.to} onClick={element.onclick}>
+                                                        {element.text}
+                                                        {element.icon}
+                                                    </Button>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            ) : null}
+                        </>
+                    ) : (
+                        <div className={cx('formUser')}>
+                            <button className={cx('register')}>
+                                <Button to={'/register'}>Đăng Ký</Button>
+                            </button>
+                            <button className={cx('login')}>
+                                <Button to={'/login'}>Đăng nhập</Button>
+                            </button>
                         </div>
-                    ) : null}
+                    )}
                 </div>
             </div>
         </div>

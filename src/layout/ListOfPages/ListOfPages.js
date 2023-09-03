@@ -124,62 +124,70 @@ function ListOfPages() {
 
     return (
         <>
-            <div
-                style={
-                    color && {
-                        backgroundImage: `linear-gradient(#3f3f3f 0, rgb(${color[0]}, ${color[1]}, ${color[2]}) 100%)`,
-                        boxShadow: `
+            <div className={cx('content_context')}>
+                <div
+                    style={
+                        color && {
+                            backgroundImage: `linear-gradient(#3f3f3f 0, rgb(${color[0]}, ${color[1]}, ${color[2]}) 100%)`,
+                            boxShadow: `
                         0px 55px 124px 28px rgb(${color[0]} ${color[1]} ${color[2]} / 34%)`,
+                        }
                     }
-                }
-                className={cx('box_content_music')}
-            >
-                <div className={cx('header')}>
-                    <div className={cx('image-artist')} onClick={() => handelImags()}>
-                        <img src={imageBig} alt="" />
+                    className={cx('box_content_music')}
+                >
+                    <div className={cx('header')}>
+                        <div className={cx('image-artist')} onClick={() => handelImags()}>
+                            <img src={imageBig} alt="" />
+                        </div>
+                        <div className={cx('album-info-by-artist')}>
+                            <h4>{type}</h4>
+                            <h2>{nameAlbum}</h2>
+                            <div>
+                                <img src={imagesmall} alt="2" />
+                                <a src="/">{nameArtist}</a>
+                                {Icon}
+                                <p>{day}</p>
+                                {Icon}
+                                <p className={cx('number-song')}>{numberOfTrack + ' ' + 'bài hát' + ''} </p>
+                                <p className={cx('time')}>{overRall}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div className={cx('album-info-by-artist')}>
-                        <h4>{type}</h4>
-                        <h2>{nameAlbum}</h2>
-                        <div>
-                            <img src={imagesmall} alt="2" />
-                            <a src="/">{nameArtist}</a>
-                            {Icon}
-                            <p>{day}</p>
-                            {Icon}
-                            <p className={cx('number-song')}>{numberOfTrack + ' ' + 'bài hát' + ''} </p>
-                            <p className={cx('time')}>{overRall}</p>
+                    <div ref={changesize} className={cx('show_image_content')} onClick={() => outside()}>
+                        <div ref={mousesmile} className={cx('container_box_X')}>
+                            <img onClick={(event) => handleChildClick(event)} src={imageSize} alt="" />
+                            <p onClick={() => outImages()}>Đóng</p>
                         </div>
                     </div>
                 </div>
-                <div ref={changesize} className={cx('show_image_content')} onClick={() => outside()}>
-                    <div ref={mousesmile} className={cx('container_box_X')}>
-                        <img onClick={(event) => handleChildClick(event)} src={imageSize} alt="" />
-                        <p onClick={() => outImages()}>Đóng</p>
+                <div className={cx('container')}>
+                    <UserfulFunction nameAlbum={nameAlbum} />
+                    <div className={cx('list_table')}>
+                        <table>
+                            <tr>
+                                <th>{<FontAwesomeIcon icon={faHashtag} />}</th>
+                                <th>Tiêu đề</th>
+                                <th>{<FontAwesomeIcon icon={faClock} />}</th>
+                            </tr>
+                            <Playsongs component={component} />
+                        </table>
                     </div>
                 </div>
+                <footer>
+                    <p>
+                        {releaseYearL.day &&
+                            releaseYearL.day[2] +
+                                ' ' +
+                                'tháng' +
+                                ' ' +
+                                releaseYearL.day[1] +
+                                ', ' +
+                                releaseYearL.day[0]}
+                    </p>
+                    <span className={cx('copyrights')}>{copyrights[0].name}</span>
+                    <span className={cx('copyrights')}>{copyrights[1].name}</span>
+                </footer>
             </div>
-            <div className={cx('container')}>
-                <UserfulFunction nameAlbum={nameAlbum} />
-                <div className={cx('list_table')}>
-                    <table>
-                        <tr>
-                            <th>{<FontAwesomeIcon icon={faHashtag} />}</th>
-                            <th>Tiêu đề</th>
-                            <th>{<FontAwesomeIcon icon={faClock} />}</th>
-                        </tr>
-                        <Playsongs component={component} />
-                    </table>
-                </div>
-            </div>
-            <footer>
-                <p>
-                    {releaseYearL.day &&
-                        releaseYearL.day[2] + ' ' + 'tháng' + ' ' + releaseYearL.day[1] + ', ' + releaseYearL.day[0]}
-                </p>
-                <span className={cx('copyrights')}>{copyrights[0].name}</span>
-                <span className={cx('copyrights')}>{copyrights[1].name}</span>
-            </footer>
         </>
     );
 }

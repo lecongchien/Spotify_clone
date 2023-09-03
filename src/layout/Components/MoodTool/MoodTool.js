@@ -4,10 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImages, faPause, faPlay, faVolumeHigh, faVolumeLow, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import { Devides, HeartLips, LoopMusic, Mix, Next, PlaylistDelay, Prev, WatchPlay } from '~/assets/Icon/Icon';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Howl } from 'howler';
 import { useDispatch } from 'react-redux';
 import { setData } from '~/redux/actions';
-import { DataIdSong, NumberContext, PlayAndPause, Toggle } from '~/App';
+import { DataIdSong, NumberContext, PlayAndPause, Setsize, Toggle } from '~/App';
 import Tippy from '@tippyjs/react';
 const cx = classNames.bind(styles);
 
@@ -28,7 +27,7 @@ function MoodTool() {
     const [nameSong, setNameSong] = useState('');
     const [loop, setLoop] = useState(false);
     const [mix, setMix] = useState(false);
-    const [random, setRandom] = useState(false);
+    const [toggle, setToggle] = useState(false);
     const [songs, setSongs] = useState();
     const handleToggle = useContext(Toggle);
     //redux
@@ -195,8 +194,17 @@ function MoodTool() {
         }
     };
 
+    const togglePlay = () => {
+        setToggle(!toggle);
+    };
+
     return (
         <div className={cx('moodTool')}>
+            <Toggle.Consumer>
+                {(context) => {
+                    context.toggle(toggle);
+                }}
+            </Toggle.Consumer>
             <div className={cx('content_player')}>
                 <div className={cx('music_information')}>
                     {data.setIdPlaySong && (
@@ -301,7 +309,7 @@ function MoodTool() {
                             placement={'top'}
                             content="Chế độ xem Đang phát"
                         >
-                            <button>
+                            <button onClick={() => togglePlay()}>
                                 <WatchPlay />
                             </button>
                         </Tippy>
