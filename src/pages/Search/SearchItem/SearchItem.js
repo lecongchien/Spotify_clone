@@ -22,20 +22,14 @@ function SearchItem() {
             return;
         }
 
-        const artistsID = await fetch(
-            `https://api.spotify.com/v1/search?q=${decodeURIComponent(searchValue)}&type=artist`,
-            theme.artistsParmester,
-        )
+        const artistsID = await fetch(`https://api.spotify.com/v1/search?q=${decodeURIComponent(searchValue)}&type=artist`, theme.artistsParmester)
             .then((response) => response.json())
             .then((data) => {
                 setDataSearch(data.artists.items[0].id);
                 return data.artists.items[0].id;
             });
 
-        const Albums = await fetch(
-            `https://api.spotify.com/v1/artists/${artistsID}/albums?market=ES&limit=20`,
-            theme.artistsParmester,
-        )
+        const Albums = await fetch(`https://api.spotify.com/v1/artists/${artistsID}/albums?market=ES&limit=20`, theme.artistsParmester)
             .then((response) => response.json())
             .then((data) => {
                 setAlbums(data.items);

@@ -9,6 +9,8 @@ import {
     faArrowLeft,
     faArrowRight,
     faBook,
+    faFolder,
+    faHeadphones,
     faHouse,
     faMagnifyingGlass,
     faPlus,
@@ -25,7 +27,7 @@ function Navbar() {
     const [HandelSizes, setHandelSizes] = useState(false);
     const navbarRef = useRef(null);
     const handelsizetext = useRef(null);
-
+    const [handlefolder, setHandleFoder] = useState(false);
     const category = [
         {
             id: 1,
@@ -66,6 +68,9 @@ function Navbar() {
         setHandelSizes(!HandelSizes);
     };
 
+    const changeListPlay = () => {
+        setHandleFoder(!handlefolder);
+    };
     return (
         <>
             <div className={cx('navbar')}>
@@ -109,10 +114,24 @@ function Navbar() {
                                     className={cx('tippy-title')}
                                     arrow={false}
                                     placement={'top'}
-                                    content="Lưu vào Thư viện"
+                                    content="Tạo danh sách phát và thư mục"
                                 >
-                                    <FontAwesomeIcon icon={faPlus} />
+                                    <FontAwesomeIcon onClick={() => changeListPlay()} icon={faPlus} />
                                 </Tippy>
+                                {handlefolder ? (
+                                    <div className={cx('add_foder')}>
+                                        <ul>
+                                            <li>
+                                                <FontAwesomeIcon icon={faHeadphones} />
+                                                <p>Tạo danh sách phát mới</p>
+                                            </li>
+                                            <li>
+                                                <FontAwesomeIcon icon={faFolder} />
+                                                <p>Tạo thư mục danh sách phát</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                ) : null}
                                 <Tippy
                                     className={cx('tippy-title')}
                                     arrow={false}

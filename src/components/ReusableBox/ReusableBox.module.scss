@@ -1,5 +1,5 @@
 .container {
-    width: 215px;
+    width: 200px;
     background-color: #29292960;
     border-radius: 3px;
     padding: 15px 15px 20px;
@@ -73,22 +73,22 @@
     max-width: 48%;
 }
 
-@media screen and (max-width: 1200px) and (min-width: 1130px) {
-    .container {
-        width: 16.5vw;
-    }
-}
+// @media screen and (max-width: 1200px) and (min-width: 1130px) {
+//     .container {
+//         width: 16.5vw;
+//     }
+// }
 
-@media screen and (max-width: 1200px) and (min-width: 920px) {
-    .container {
-        width: 19.5vw;
-        margin-right: 20px;
-    }
-}
+// @media screen and (max-width: 1200px) and (min-width: 920px) {
+//     .container {
+//         width: 19.5vw;
+//         margin-right: 20px;
+//     }
+// }
 
-@media screen and (max-width: 920px) {
-    .container {
-        width: 27vw;
-        margin-right: 5px;
-    }
-}
+// @media screen and (max-width: 920px) {
+//     .container {
+//         width: 27vw;
+//         margin-right: 5px;
+//     }
+// }

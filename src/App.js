@@ -22,6 +22,7 @@ function App() {
     const [togglePlay, setTogglePlay] = useState();
     const [handleToggle, setHandleToggle] = useState();
     const [handleLogin, setHandleLogin] = useState();
+
     return (
         <Provider store={store}>
             <LoginAndRegister.Provider value={{ login: handleLogin, LoginRegister: (value) => setHandleLogin(value) }}>

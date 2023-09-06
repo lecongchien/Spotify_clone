@@ -36,11 +36,11 @@ function RegisterAndLogin() {
             <form onSubmit={(e) => handleSubmit(e)}>
                 <div className={cx('email')}>
                     <label for="Email">Email của bạn là gì?</label>
-                    <input name="password" type="password" placeholder="Nhập email của bạn." />
+                    <input name="email" placeholder="Nhập email của bạn." />
                 </div>
                 <div className={cx('password')}>
-                    <label for="Email">Tạo mật khẩu</label>
-                    <input name="email" placeholder="Tạo mật khẩu." />
+                    <label for="password">Tạo mật khẩu</label>
+                    <input name="password" type="password" placeholder="Tạo mật khẩu." />
                 </div>
                 <div className={cx('name')}>
                     <label for="Email">Bạn tên là gì?</label>

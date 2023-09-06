@@ -6,6 +6,7 @@ import MoodTool from '../Components/MoodTool/MoodTool';
 import { useContext, useEffect, useRef } from 'react';
 import { Setsize, Toggle } from '~/App';
 import Expectations from '../Components/Expectations/Expectations';
+import NetworkStatusNotifier from '../NetworkStatusNotifier/NetworkStatusNotifier';
 
 const cx = classNames.bind(styles);
 
@@ -39,6 +40,7 @@ function DefaultLayout({ children }) {
     return (
         <>
             <div className={cx('HI_THERE')}>
+                <NetworkStatusNotifier />
                 <div ref={navbar} className={cx('navbar')}>
                     <Navbar />
                 </div>

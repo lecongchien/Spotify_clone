@@ -1,7 +1,47 @@
+.content_bo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    .header_content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        > h2 {
+            margin-bottom: 15px;
+            text-transform: capitalize;
+            font-weight: bold;
+            font-size: 2.7rem;
+        }
+        > p {
+            font-weight: bold;
+            color: #b9b9b9;
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+    .container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+    .content_onder {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    .change {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
 .List-Box {
     padding-top: 98px;
     background-image: linear-gradient(rgba(0, 0, 0, 0.6) 0, rgb(18, 18, 18) 100%);
     transition: 1000ms ease;
+    height: 300px;
 }
 
 .header {
@@ -17,7 +57,7 @@
 }
 .song_items {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
     flex-wrap: wrap;
     margin: 20px 0 0;
     padding: 0 20px;
@@ -34,6 +74,94 @@
     border-radius: 5px;
     margin-bottom: 20px;
     justify-content: space-between;
+}
+
+.box,
+.handle_box {
+    position: relative;
+    margin-right: 17.5px;
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column;
+    background-color: rgba(41, 41, 41, 0.485);
+    margin-bottom: 20px;
+    transition: 150ms ease-in-out;
+    &:hover {
+        transition: 150ms ease-in-out;
+        background-color: rgba(166, 166, 166, 0.1490196078);
+        .cricle_Green_Play {
+            transition: 150ms ease-in-out;
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    > a {
+        width: 100%;
+        height: 100%;
+        .content_info {
+            width: 209px;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            align-items: start;
+            .images,
+            .cricle_image {
+                width: 179px;
+                height: 179px;
+                border-radius: 5px;
+                overflow: hidden;
+                > img {
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .cricle_image {
+                border-radius: 50%;
+            }
+            .info_art {
+                width: 100%;
+                > p {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-weight: bold;
+                    margin-top: 5px;
+                }
+                > h3 {
+                    margin-top: 15px;
+                    overflow: hidden !important;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+    .cricle_Green_Play {
+        position: absolute;
+        right: 10px;
+        bottom: 100px;
+        background-color: #1db954;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        opacity: 0;
+        transform: scale(0.96) translateY(30px);
+        box-shadow: 0px 2.9px 2.7px rgba(0, 0, 0, 0.16), 0px 7.2px 6.9px rgba(0, 0, 0, 0.228),
+            0px 14.7px 14.2px rgba(0, 0, 0, 0.287), 0px 30.3px 29.2px rgba(0, 0, 0, 0.36),
+            0px 83px 80px rgba(0, 0, 0, 0.48);
+        transition: 150ms ease-in-out;
+
+        &:hover {
+            transform: scale(1);
+            background-color: #00d95f;
+        }
+    }
 }
 
 .content_box {
@@ -69,9 +197,9 @@
     }
 }
 
-.hande_content {
+.hande_content,
+.handle_box {
     background-color: #a6a6a667;
-
     .cricle_Green_Play {
         background-color: #1db954;
         width: 50px;
@@ -133,6 +261,7 @@
     opacity: 0;
     visibility: hidden;
     transition: 400ms ease;
+    z-index: 99999;
     transform: translateX(100px);
     &::before {
         content: '';
