@@ -35,35 +35,35 @@ function ListBox() {
         },
         {
             name: 'k-pop',
-            id: 20,
+            id: 10,
         },
         {
             name: 'jazz',
-            id: 20,
+            id: 10,
         },
         {
             name: 'rock',
-            id: 20,
+            id: 10,
         },
         {
             name: 'classical',
-            id: 20,
+            id: 10,
         },
         {
             name: 'gospel',
-            id: 20,
+            id: 10,
         },
         {
             name: 'funk',
-            id: 20,
+            id: 10,
         },
         {
             name: 'blues',
-            id: 20,
+            id: 10,
         },
         {
             name: 'folk',
-            id: 20,
+            id: 10,
         },
     ];
 
@@ -159,11 +159,11 @@ function ListBox() {
             if (error === null) {
                 hadleError.current.style.opacity = 1;
                 hadleError.current.style.visibility = 'visible';
-                hadleError.current.style.transform = 'translateX(0px)';
+                hadleError.current.style.transform = 'translateY(0px)';
             } else {
                 hadleError.current.style.opacity = 0;
                 hadleError.current.style.visibility = 'hidden';
-                hadleError.current.style.transform = 'translateX(100px)';
+                hadleError.current.style.transform = 'translateY(-50px)';
             }
         }, 1000);
         return () => clearTimeout(timerID);
@@ -274,7 +274,6 @@ function ListBox() {
                     ))}
                 </div>
             </div>
-            <Lyric />
         </div>
     );
 }

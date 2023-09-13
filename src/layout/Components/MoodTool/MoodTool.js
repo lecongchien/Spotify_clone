@@ -197,7 +197,7 @@ function MoodTool() {
     const togglePlay = () => {
         setToggle(!toggle);
     };
-
+    
     return (
         <div className={cx('moodTool')}>
             <Toggle.Consumer>

@@ -98,6 +98,7 @@ function Header() {
                             {!(
                                 allLocation === `/artists/${IdAlBum}` ||
                                 allLocation === `/albums/${IdAlBum}` ||
+                                allLocation === `/MyPlaylist/${IdAlBum}` ||
                                 allLocation === config.routes.playlist ||
                                 allLocation === config.routes.album ||
                                 allLocation === config.routes.podcast ||
@@ -119,7 +120,11 @@ function Header() {
                                 allLocation === config.routes.podcast ||
                                 allLocation === config.routes.artists || <Button button active title={'Nâng cấp'} />}
                             <Button settingapp title={'Cài đặt ứng dụng'} icon={<CricleDown />} />
-                            <Button user icon={<FontAwesomeIcon icon={faUser} />} onClick={() => setChanges(!changes)} />
+                            <Button
+                                user
+                                icon={<FontAwesomeIcon icon={faUser} />}
+                                onClick={() => setChanges(!changes)}
+                            />
                             {changes ? (
                                 <div className={cx('utility_box')}>
                                     <ul>

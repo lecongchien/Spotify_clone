@@ -19,6 +19,8 @@ function DefaultLayout({ children }) {
     const sizeIn = useContext(Setsize);
     const toggle = useContext(Toggle);
     const navbar = useRef();
+    const righttab = useRef();
+
     useEffect(() => {
         if (handelSize.current) {
             if (sizeIn.setSizeApp) {
@@ -29,9 +31,11 @@ function DefaultLayout({ children }) {
                 navbar.current.style.flex = '0 0 25%';
                 if (toggle.setNb) {
                     handelSize.current.style.flex = '0 0 45%';
+                    righttab.current.style.display = 'block';
                 } else {
                     handelSize.current.style.flex = '0 0 75%';
                     navbar.current.style.flex = '0 0 25%';
+                    righttab.current.style.display = 'none';
                 }
             }
         }
@@ -50,7 +54,8 @@ function DefaultLayout({ children }) {
                         {children}
                     </div>
                 </div>
-                <Expectations />
+
+                <Expectations name={righttab} />
             </div>
             <MoodTool />
         </>

@@ -4,24 +4,26 @@
         display: flex;
         flex-direction: column-reverse;
         width: 100%;
-        > li {
-            width: 100%;
-            position: relative;
-            display: flex;
-            align-items: center;
-            margin-top: 5px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 2px 5px;
-            border-radius: 5px;
-            &:hover {
-                background-color: #3c3c3c84;
-            }
-            &:hover {
+        > a {
+            > li {
+                width: 100%;
                 position: relative;
-                z-index: 3;
-                opacity: 1;
+                display: flex;
+                align-items: center;
+                margin-top: 5px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                padding: 2px 5px;
+                border-radius: 5px;
+                &:hover {
+                    background-color: #3c3c3c84;
+                }
+                &:hover {
+                    position: relative;
+                    z-index: 3;
+                    opacity: 1;
+                }
             }
         }
     }
@@ -76,5 +78,21 @@
             width: 5px;
             padding: 0 5px;
         }
+    }
+}
+
+.create_plalist_music {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-top: 30px;
+    position: absolute;
+    > a {
+        padding: 5px 20px;
+        border-radius: 20px;
+        background-color: #fff;
+        color: #000;
+        font-weight: bold;
     }
 }

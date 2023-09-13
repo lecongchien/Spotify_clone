@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Navbar.module.scss';
 import Tippy from '@tippyjs/react';
@@ -18,7 +18,7 @@ import {
     faSortDown,
 } from '@fortawesome/free-solid-svg-icons';
 import Playlists from './Playlists';
-import { Setsize } from '~/App';
+import { LoginAndRegister, Setsize } from '~/App';
 import images from '~/assets/image';
 
 const cx = classNames.bind(styles);
@@ -28,6 +28,10 @@ function Navbar() {
     const navbarRef = useRef(null);
     const handelsizetext = useRef(null);
     const [handlefolder, setHandleFoder] = useState(false);
+    const [listPlay, setListPlay] = useState([]);
+    const [listCount, setListCount] = useState(0);
+    const Logins = useContext(LoginAndRegister);
+
     const category = [
         {
             id: 1,
@@ -40,6 +44,14 @@ function Navbar() {
             text: 'Tìm kiếm',
             to: '/search/',
             fontaws: <FontAwesomeIcon icon={faMagnifyingGlass} />,
+        },
+    ];
+
+    const list = [
+        {
+            id: 1,
+            textlist: 'Danh sách phát của tôi',
+            to: `/playlist/`,
         },
     ];
 
@@ -71,6 +83,20 @@ function Navbar() {
     const changeListPlay = () => {
         setHandleFoder(!handlefolder);
     };
+
+    const creactMusic = () => {
+        if (Logins.login) {
+            const newId = list.length;
+            const newItem = {
+                id: newId + listCount,
+                textlist: 'Danh sách phát của tôi',
+                to: `/MyPlaylist/${newId + listCount}`,
+            };
+            setListPlay((prevList) => [...prevList, newItem]);
+            setListCount((prevCount) => prevCount + 1);
+        }
+    };
+
     return (
         <>
             <div className={cx('navbar')}>
@@ -121,7 +147,7 @@ function Navbar() {
                                 {handlefolder ? (
                                     <div className={cx('add_foder')}>
                                         <ul>
-                                            <li>
+                                            <li onClick={creactMusic}>
                                                 <FontAwesomeIcon icon={faHeadphones} />
                                                 <p>Tạo danh sách phát mới</p>
                                             </li>
@@ -169,7 +195,7 @@ function Navbar() {
                                         <FontAwesomeIcon icon={faSortDown} />
                                     </div>
                                 </div>
-                                <Playlists />
+                                <Playlists listP={listPlay} />
                             </div>
                         </div>
                     </div>

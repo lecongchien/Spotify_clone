@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Button.module.scss';
 import Tippy from '@tippyjs/react';
 import { followCursor } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/scale.css';
-import { databate } from '../PasswordLoginWithFirebase/FireBaseConfig';
+import NameUser from '../NameUser/NameUser';
 const cx = classNames.bind(styles);
 
 function Button({
@@ -79,14 +79,6 @@ function Button({
     };
 
     //
-    const [userName, setUserName] = useState('');
-    useEffect(() => {
-        databate.onAuthStateChanged((user) => {
-            if (user) {
-                setUserName(user.displayName);
-            } else setUserName('');
-        });
-    });
     return (
         <Component onClick={onClick} className={className} {...props}>
             {children}
@@ -126,9 +118,20 @@ function Button({
             ) : null}
             {user ? (
                 <>
-                    <Tippy content={<strong style={divstyles}>{userName}</strong>} duration={[500, 0]} arrow={false}>
+                    <Tippy
+                        content={<strong style={divstyles}>{<NameUser />}</strong>}
+                        duration={[500, 0]}
+                        arrow={false}
+                    >
                         <div className={cx('box-user')}>
-                            <Tippy content={userName} delay={[500]} animation={'scale'} arrow={false} followCursor={true} plugins={[followCursor]}>
+                            <Tippy
+                                content={<NameUser />}
+                                delay={[500]}
+                                animation={'scale'}
+                                arrow={false}
+                                followCursor={true}
+                                plugins={[followCursor]}
+                            >
                                 <div className={cx('users')}>{icon}</div>
                             </Tippy>
                             <div className={cx('username')}>{title}</div>

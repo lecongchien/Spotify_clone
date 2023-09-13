@@ -1,21 +1,31 @@
-import { faCircle, faClock, faHashtag } from '@fortawesome/free-solid-svg-icons';
+import { faCircle, faClock, faClose, faEllipsis, faHashtag, faMusic, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import styles from './ListOfPages.module.scss';
 import ColorThief from 'colorthief';
-import BoxcardMusic from '~/components/BoxcardMusic/BoxcardMusic';
 import UserfulFunction from '~/components/UserfulFunction/UserfulFunction';
 import { ThemeContext } from '~/components/themeContext/themeContext';
 import axios from 'axios';
 import Playsongs from './Playsongs/Playsongs';
+import NameUser from '~/components/NameUser/NameUser';
 const cx = classNames.bind(styles);
 
 function ListOfPages() {
     const { ID } = useParams(null);
     const [component, setComponet] = useState([null]);
+    const [isMouseOver, setIsMouseOver] = useState(false);
+    const [changeFile, setChangeFile] = useState(null);
+    const [handelClose, sethandleClose] = useState(false);
+    const [handelSetting, setHandleSetting] = useState(false);
+    const [delayImage, setDelayImage] = useState();
     const theme = useContext(ThemeContext);
+    const loactionsMyPlaylist = useLocation();
+    const allUrl = loactionsMyPlaylist.pathname;
+    const fileInputRef = useRef(null);
+    const setUrl = allUrl.split('/');
+    const IDUrl = setUrl[2];
 
     const fetchProducts = useCallback(async () => {
         const reload = await axios
@@ -79,12 +89,12 @@ function ListOfPages() {
     useEffect(() => {
         const image = new Image();
         image.crossOrigin = 'Anonymous';
-        image.src = `${imageBig}`;
+        image.src = `${imageBig || changeFile}`;
         image.onload = () => {
             const colorThief = new ColorThief();
             setColor(colorThief.getColor(image));
         };
-    }, [imageBig]);
+    }, [imageBig, changeFile]);
 
     //change size images
 
@@ -92,11 +102,16 @@ function ListOfPages() {
     const mousesmile = useRef();
 
     const handelImags = () => {
-        changesize.current.style.visibility = 'visible';
-        mousesmile.current.style.transform = 'scale(1) translateY(0)';
-        mousesmile.current.style.transition = '500ms ease';
-        mousesmile.current.style.opacity = '1';
-        changesize.current.style.opacity = '1';
+        if (allUrl !== `/MyPlaylist/${IDUrl}`) {
+            changesize.current.style.visibility = 'visible';
+            mousesmile.current.style.transform = 'scale(1) translateY(0)';
+            mousesmile.current.style.transition = '500ms ease';
+            mousesmile.current.style.opacity = '1';
+            changesize.current.style.opacity = '1';
+        } else {
+            sethandleClose(true);
+            fileInputRef.current.click();
+        }
     };
 
     const outImages = () => {
@@ -122,6 +137,36 @@ function ListOfPages() {
         return false;
     };
 
+    const mouseover = () => {
+        setIsMouseOver(true);
+    };
+
+    const mouseLeave = () => {
+        setIsMouseOver(false);
+    };
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile && (selectedFile instanceof File || selectedFile instanceof Blob)) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setChangeFile(reader.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    };
+
+    useEffect(() => {
+        setDelayImage(changeFile);
+    }, [changeFile]);
+    const changeOnClick = () => {
+        sethandleClose(false);
+    };
+
+    const setting = () => {
+        setHandleSetting(!handelSetting);
+    };
+
     return (
         <>
             <div className={cx('content_context')}>
@@ -136,20 +181,51 @@ function ListOfPages() {
                     className={cx('box_content_music')}
                 >
                     <div className={cx('header')}>
-                        <div className={cx('image-artist')} onClick={() => handelImags()}>
-                            <img src={imageBig} alt="" />
+                        <div
+                            className={cx('image-artist')}
+                            onClick={() => handelImags()}
+                            onMouseOver={() => mouseover()}
+                            onMouseLeave={() => mouseLeave()}
+                        >
+                            {allUrl !== `/MyPlaylist/${IDUrl}` ? (
+                                <img src={imageBig} alt="" />
+                            ) : isMouseOver ? (
+                                <>
+                                    <FontAwesomeIcon icon={faPen} />
+                                    <p>Chọn ảnh</p>
+                                </>
+                            ) : delayImage ? (
+                                delayImage && <img src={delayImage} alt="Selected" />
+                            ) : (
+                                <FontAwesomeIcon icon={faMusic} />
+                            )}
                         </div>
+                        <form method="post">
+                            <input
+                                type="file"
+                                id="myFileInput"
+                                name="file"
+                                multiple
+                                style={{ display: 'none' }}
+                                ref={fileInputRef}
+                                onChange={(event) => handleFileChange(event)}
+                            />
+                        </form>
                         <div className={cx('album-info-by-artist')}>
-                            <h4>{type}</h4>
-                            <h2>{nameAlbum}</h2>
+                            <h4>{allUrl !== `/MyPlaylist/${IDUrl}` ? type : 'Playlist'}</h4>
+                            <h2>{allUrl !== `/MyPlaylist/${IDUrl}` ? type : `Danh sách phát của tôi #${setUrl[2]}`}</h2>
                             <div>
-                                <img src={imagesmall} alt="2" />
-                                <a src="/">{nameArtist}</a>
-                                {Icon}
-                                <p>{day}</p>
-                                {Icon}
-                                <p className={cx('number-song')}>{numberOfTrack + ' ' + 'bài hát' + ''} </p>
-                                <p className={cx('time')}>{overRall}</p>
+                                {allUrl !== `/MyPlaylist/${IDUrl}` ? <img src={imagesmall} alt="2" /> : null}
+                                <a src="/">{allUrl !== `/MyPlaylist/${IDUrl}` ? nameArtist : <NameUser />}</a>
+                                {allUrl !== `/MyPlaylist/${IDUrl}` ? (
+                                    <>
+                                        {Icon}
+                                        <p>{day}</p>
+                                        {Icon}
+                                        <p className={cx('number-song')}>{numberOfTrack + ' ' + 'bài hát' + ''} </p>
+                                        <p className={cx('time')}>{overRall}</p>
+                                    </>
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -187,6 +263,66 @@ function ListOfPages() {
                     <span className={cx('copyrights')}>{copyrights[0].name}</span>
                     <span className={cx('copyrights')}>{copyrights[1].name}</span>
                 </footer>
+                {handelClose && (
+                    <div className={cx('Edit_detailed_information')}>
+                        <div className={cx('edit_content')}>
+                            <div className={cx('header_edit')}>
+                                <h2>Sửa thông tin chi tiết</h2>
+                                <FontAwesomeIcon onClick={() => changeOnClick()} icon={faClose} />
+                            </div>
+                            <div className={cx('content_edit')}>
+                                <div className={cx('box-left')}>
+                                    {isMouseOver ? (
+                                        <>
+                                            <FontAwesomeIcon icon={faPen} />
+                                            <p>Chọn ảnh</p>
+                                        </>
+                                    ) : changeFile ? (
+                                        changeFile && <img src={changeFile} alt="Selected" />
+                                    ) : (
+                                        <FontAwesomeIcon icon={faMusic} />
+                                    )}
+
+                                    <FontAwesomeIcon
+                                        onClick={() => setting()}
+                                        className={cx('ellipsis')}
+                                        icon={faEllipsis}
+                                    />
+                                    {handelSetting && (
+                                        <div className={cx('handle')}>
+                                            <ul>
+                                                <li
+                                                    onClick={() => {
+                                                        fileInputRef.current.click();
+                                                        setHandleSetting(false);
+                                                    }}
+                                                >
+                                                    Thay đổi ảnh
+                                                </li>
+                                                <li>Xóa ảnh</li>
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className={cx('box-right')}>
+                                    <input type="text" className={cx('edit_playlist')} />
+                                    <input
+                                        type="text"
+                                        placeholder="Thêm phần mô tả không bắt buộc"
+                                        className={cx('edit_describe')}
+                                    />
+                                </div>
+                            </div>
+                            <div className={cx('footer_edit')}>
+                                <button>Lưu</button>
+                            </div>
+                            <p>
+                                Bằng cách tiếp tục, bạn đồng ý cho phép Spotify truy cập vào hình ảnh bạn đã chọn để tải
+                                lên. Vui lòng đảm bảo bạn có quyền tải lên hình ảnh.
+                            </p>
+                        </div>
+                    </div>
+                )}
             </div>
         </>
     );

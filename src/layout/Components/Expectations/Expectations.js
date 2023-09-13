@@ -1,16 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './Expectations.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsis, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
-import { HeartIcon, HeartLips, MusicNote } from '~/assets/Icon/Icon';
+import { HeartIcon, MusicNote } from '~/assets/Icon/Icon';
 import { DataIdSong, Toggle } from '~/App';
 import { useContext, useEffect, useState } from 'react';
 import Noimages from '~/assets/image/noImage.jpg';
 import { ThemeContext } from '~/components/themeContext/themeContext';
-import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
-function Expectations() {
+function Expectations({ name }) {
     const [handelToggle, setHandelToggle] = useState(false);
     const toggles = () => {
         setHandelToggle(!handelToggle);
@@ -28,7 +27,7 @@ function Expectations() {
         }, 3000);
     }, [data]);
     return (
-        <div className={cx('container')}>
+        <div ref={name} className={cx('container')}>
             <Toggle.Consumer>
                 {(context) => {
                     context.toggle(handelToggle);
@@ -39,7 +38,14 @@ function Expectations() {
                     <a href="/">{data?.setIdPlaySong[0]?.name}</a>
                 </div>
                 <div className={cx('images_artist')}>
-                    <img src={data?.setIdPlaySong[1]?.images[0]?.url || data?.setIdPlaySong[0]?.album?.images[0]?.url || Noimages} alt="imgae" />
+                    <img
+                        src={
+                            data?.setIdPlaySong[1]?.images[0]?.url ||
+                            data?.setIdPlaySong[0]?.album?.images[0]?.url ||
+                            Noimages
+                        }
+                        alt="imgae"
+                    />
                 </div>
             </div>
             <div className={cx('shining_start')}>
@@ -58,7 +64,12 @@ function Expectations() {
                                 <HeartIcon />
                             </div>
                         </Tippy>
-                        <Tippy className={cx('tippy_title')} arrow={false} placement={'top'} content="Các tùy chọn khác cho">
+                        <Tippy
+                            className={cx('tippy_title')}
+                            arrow={false}
+                            placement={'top'}
+                            content="Các tùy chọn khác cho"
+                        >
                             <FontAwesomeIcon icon={faEllipsis} />
                         </Tippy>
                     </div>

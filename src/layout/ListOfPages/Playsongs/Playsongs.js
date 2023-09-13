@@ -28,6 +28,7 @@ function Playsongs({ component }) {
                 setIdSong(run);
                 const a = { ...state, isPlaying: !state.isPlaying }; // Đảo ngược trạng thái play/
                 setToggle(a.isPlaying); // Đảo ngược trạng thái play/pause
+                console.log(a);
                 return a;
             } else {
                 return { ...state, isPlaying: false }; // Đảo ngược trạng thái play/pause

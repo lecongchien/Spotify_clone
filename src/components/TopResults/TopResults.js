@@ -38,10 +38,7 @@ function TopResults() {
                     </div>
                 </ReusableBox>
                 <ReusableBox TopResults>
-                    <div className={cx('results_contains_right')}>
-                        <h2>Kết quản hàng đầu</h2>
-                        <div className={cx('artist_on')}>1111</div>
-                    </div>
+                    <div className={cx('results_contains_right')}></div>
                 </ReusableBox>
             </div>
         </>

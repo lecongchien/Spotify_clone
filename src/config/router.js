@@ -10,6 +10,7 @@ const routes = {
     Login: '/login',
     Register: '/register',
     Loader: '/loader',
+    MyPlaylist: '/MyPlaylist/:ID',
 };
 
 export default routes;

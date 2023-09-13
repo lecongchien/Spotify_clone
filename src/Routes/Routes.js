@@ -24,8 +24,8 @@ const publicRoutes = [
     { path: config.routes.Login, component: Register },
     { path: config.routes.Register, component: RegisterAndLogin },
     { path: config.routes.Loader, component: Loader },
-
     { path: '/albums/:ID', component: ListOfPages },
+    { path: config.routes.MyPlaylist, component: ListOfPages },
 ];
 
 function Run() {
