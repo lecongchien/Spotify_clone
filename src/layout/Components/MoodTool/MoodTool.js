@@ -6,15 +6,22 @@ import { Devides, HeartLips, LoopMusic, Mix, Next, PlaylistDelay, Prev, WatchPla
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setData } from '~/redux/actions';
-import { DataIdSong, NumberContext, PlayAndPause, Setsize, Toggle } from '~/App';
+import { NumberContext, Setsize } from '~/App';
 import Tippy from '@tippyjs/react';
+import { DataIdSong } from '~/components/Context/DataIdSong';
+import { PlayAndPause } from '~/components/Context/PlayAndPause';
+import { Toggle } from '~/components/Context/Toggle';
+import { PlaylistContext } from '~/components/Context/PlaylistContext';
+import { Count } from '~/components/Context/CountContect';
 const cx = classNames.bind(styles);
 
 function MoodTool() {
     const [IdData, setIDdata] = useState('');
+    const [IdPlaylist, setIdPlaylist] = useState('');
     const data = useContext(DataIdSong);
-    // console.log(data)
     const Play = useContext(PlayAndPause);
+    const Playlist = useContext(PlaylistContext);
+    console.log(Playlist);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -72,9 +79,10 @@ function MoodTool() {
             prevDataRef.current = data;
             setIDdata(data.setIdPlaySong[0] ? data.setIdPlaySong[0]?.preview_url : data.setIdPlaySong);
             setCount(data?.setIdPlaySong[0]?.track_number - 1);
+        } else if (Playlist) {
+            setCount(Playlist && Playlist.playlistcontext && Playlist.playlistcontext[1]);
         }
-    }, [data]);
-
+    }, [data, Playlist]);
     const handleTimeUpdate = () => {
         setCurrentTime(audioRef.current.currentTime);
     };
@@ -130,21 +138,30 @@ function MoodTool() {
     };
 
     const handleNext = () => {
-        if (count < data.setIdPlaySong[1]?.tracks.items.length - 1) {
+        if (
+            count < data.setIdPlaySong[1]?.tracks.items.length - 1 ||
+            Playlist?.playlistcontext[0]?.tracks?.items.length - 1
+        ) {
             setCount(count + 1);
             dispatch(setData([count + 1, false]));
         }
     };
 
     useEffect(() => {
-        if (data.setIdPlaySong && data.setIdPlaySong[1]?.tracks.items.length > 0) {
+        if (data.setIdPlaySong && data.setIdPlaySong[1]?.tracks.items.length >= 0) {
             setIDdata(data?.setIdPlaySong[1]?.tracks?.items[count]?.preview_url);
             setNameSong(data?.setIdPlaySong[1]?.tracks?.items[count]?.name);
         } else if (data.setIdPlaySong && !data.setIdPlaySong[1]) {
             setIDdata(data?.setIdPlaySong[0]?.preview_url);
             setNameSong(data?.setIdPlaySong[0]?.name);
         }
-    }, [count, data.setIdPlaySong]);
+    }, [count, data.setIdPlaySong, Playlist.playlistcontext]);
+    //Playlist
+    useEffect(() => {
+        if (Playlist?.playlistcontext && Playlist.playlistcontext[0]?.tracks) {
+            setIDdata(Playlist.playlistcontext[0].tracks.items[count]?.track?.preview_url);
+        }
+    }, [Playlist.playlistcontext, count]);
 
     //Xử lý logic khi nghe xong bài hát lập tức tự chuyển sang bài hát tiếp theo
     useEffect(() => {
@@ -179,13 +196,13 @@ function MoodTool() {
         }
     };
 
-    useEffect(() => {
-        if (data.setIdPlaySong && data.setIdPlaySong[1]?.tracks.items.length > 0) {
-            const songList = [...data.setIdPlaySong[1]?.tracks.items];
-            shuffleArray(songList);
-            setSongs(songList);
-        }
-    }, [data.setIdPlaySong]);
+    // useEffect(() => {
+    //     if (data.setIdPlaySong && data.setIdPlaySong[1]?.tracks.items.length > 0) {
+    //         const songList = [...data.setIdPlaySong[1]?.tracks.items];
+    //         shuffleArray(songList);
+    //         setSongs(songList);
+    //     }
+    // }, [data.setIdPlaySong]);
 
     const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -197,7 +214,6 @@ function MoodTool() {
     const togglePlay = () => {
         setToggle(!toggle);
     };
-    
     return (
         <div className={cx('moodTool')}>
             <Toggle.Consumer>
@@ -205,6 +221,11 @@ function MoodTool() {
                     context.toggle(toggle);
                 }}
             </Toggle.Consumer>
+            <Count>
+                {(context) => {
+                    context.setCounts(count);
+                }}
+            </Count>
             <div className={cx('content_player')}>
                 <div className={cx('music_information')}>
                     {data.setIdPlaySong && (
@@ -213,16 +234,21 @@ function MoodTool() {
                                 <img
                                     src={
                                         data?.setIdPlaySong[1]?.images[2]?.url ||
-                                        data?.setIdPlaySong[0]?.album?.images[2]?.url
+                                        data?.setIdPlaySong[0]?.album?.images[2]?.url ||
+                                        Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.album?.images[2]?.url
                                     }
                                     alt=""
                                 />
                             </div>
                             <div className={cx('title')}>
                                 <a href="" className={cx('title_name_song')}>
+                                    {Playlist.playlistcontext[0] &&
+                                        Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.name}
                                     {nameSong ? nameSong : data?.setIdPlaySong[0]?.name}
                                 </a>
                                 <a href="" alt="">
+                                    {Playlist.playlistcontext[0] &&
+                                        Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.artists[0].name}
                                     {data?.setIdPlaySong[0]?.artists[0]?.name}
                                 </a>
                             </div>

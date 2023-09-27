@@ -4,9 +4,10 @@ import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
 import MoodTool from '../Components/MoodTool/MoodTool';
 import { useContext, useEffect, useRef } from 'react';
-import { Setsize, Toggle } from '~/App';
 import Expectations from '../Components/Expectations/Expectations';
 import NetworkStatusNotifier from '../NetworkStatusNotifier/NetworkStatusNotifier';
+import { Setsize } from '~/components/Context/Setsize';
+import { Toggle } from '~/components/Context/Toggle';
 
 const cx = classNames.bind(styles);
 

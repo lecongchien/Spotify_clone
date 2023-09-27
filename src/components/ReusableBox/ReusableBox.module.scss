@@ -1,5 +1,5 @@
 .container {
-    width: 200px;
+    width: 207px;
     background-color: #29292960;
     border-radius: 3px;
     padding: 15px 15px 20px;
@@ -16,6 +16,9 @@
         }
     }
     .image {
+        width: 177px;
+        height: 177px;
+        overflow: hidden;
         > img {
             width: 100%;
             object-fit: cover;

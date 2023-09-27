@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { AlbumsContext, MContext } from '~/App';
 import classNames from 'classnames/bind';
 import styles from './BoxcardMusic.module.scss';
 import { useContext, useCallback } from 'react';
@@ -8,7 +7,9 @@ import { ThemeContext } from '../themeContext/themeContext';
 import Button from '../button/Button';
 import axios from 'axios';
 import { useLocation, useParams } from 'react-router-dom';
-import TopResults from '../TopResults/TopResults';
+import { MContext } from '../Context/MContext';
+import { AlbumsContext } from '../Context/AlbumsContext';
+import { Artists } from '../Context/Artists';
 const cx = classNames.bind(styles);
 
 function BoxcardMusic({ NameAlbum = false }) {
@@ -16,13 +17,14 @@ function BoxcardMusic({ NameAlbum = false }) {
     const [albumsID, setAlbumsID] = useState();
     const [ai, setai] = useState([]);
     const theme = useContext(ThemeContext);
+    const dataArtist = useContext(Artists);
     const [Genres, setGenres] = useState([]);
     const locations = useLocation();
     const allLocation = locations.pathname;
     const setIdAlbum = allLocation.split('/');
     const IdAlBum = setIdAlbum[2];
-    const [isLoading, setIsLoading] = useState(false);
 
+    // console.log(dataArtist);
     useEffect(() => {
         let IdTrack = '';
         if (albums.length) {
@@ -53,21 +55,21 @@ function BoxcardMusic({ NameAlbum = false }) {
     return (
         <>
             <div className={cx('contain_items')}>
-                {albums == '' ? null : <TopResults />}
+                <MContext.Consumer>
+                    {(context) => {
+                        setAlbums(context.state);
+                    }}
+                </MContext.Consumer>
+
+                <AlbumsContext.Consumer>
+                    {(context) => {
+                        context.setAlbum(ai);
+                    }}
+                </AlbumsContext.Consumer>
                 <div className={cx('search')}>
-                    {albums == '' ? null : <div className={cx('title')}>{NameAlbum ? 'Album khác của' + ' ' + NameAlbum : 'Album'}</div>}
-
-                    <MContext.Consumer>
-                        {(context) => {
-                            setAlbums(context.state);
-                        }}
-                    </MContext.Consumer>
-
-                    <AlbumsContext.Consumer>
-                        {(context) => {
-                            context.setAlbum(ai);
-                        }}
-                    </AlbumsContext.Consumer>
+                    {albums == '' ? null : (
+                        <div className={cx('title')}>{NameAlbum ? 'Album khác của' + ' ' + NameAlbum : 'Album'}</div>
+                    )}
 
                     <div className={cx('boxmudic')}>
                         {albums === '' ? null : (
@@ -84,7 +86,36 @@ function BoxcardMusic({ NameAlbum = false }) {
                                                     cricle_Green_Play
                                                     image={element.images[0].url}
                                                     name={element.name}
-                                                    date={element.release_date.slice(0, 4) + ' ' + element.artists[0].name}
+                                                    date={
+                                                        element.release_date.slice(0, 4) + ' ' + element.artists[0].name
+                                                    }
+                                                ></ReusableBox>
+                                            </Button>
+                                        </>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </div>
+                    {/* ===========Artist========== */}
+                    {albums == '' ? null : (
+                        <div className={cx('title')}>{NameAlbum ? 'Album khác của' + ' ' + NameAlbum : 'Artist'}</div>
+                    )}
+
+                    <div className={cx('boxmudic')}>
+                        {albums === '' ? null : (
+                            <>
+                                {dataArtist?.ArtistState?.artists?.items.slice(0, 10).map((element, index) => {
+                                    return (
+                                        <>
+                                            <Button to={`/artist/${element?.id}`} key={index}>
+                                                <ReusableBox
+                                                    container
+                                                    hover
+                                                    cricle_Green_Play
+                                                    image={element.images[0]?.url}
+                                                    name={element.name}
+                                                    artist={element.type}
                                                 ></ReusableBox>
                                             </Button>
                                         </>
@@ -94,6 +125,7 @@ function BoxcardMusic({ NameAlbum = false }) {
                         )}
                     </div>
 
+                    {/* ===========Artist========== */}
                     {albums == '' && !(allLocation === `/albums/${IdAlBum}`) ? (
                         <div className={cx('content_genres')}>
                             {Genres.map((element, index) => {

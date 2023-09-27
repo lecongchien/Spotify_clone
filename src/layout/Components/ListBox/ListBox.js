@@ -2,18 +2,20 @@ import classNames from 'classnames/bind';
 import styles from './ListBox.module.scss';
 import Button from '~/components/button';
 import { ThemeContext } from '~/components/themeContext/themeContext';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
-import { DataIdSong, PlayAndPause } from '~/App';
-import Lyric from '~/pages/Lyric/Lyric';
 import ColorThief from 'colorthief';
+import { DataID, DataIdSong } from '~/components/Context/DataIdSong';
+import { PlayAndPause } from '~/components/Context/PlayAndPause';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function ListBox() {
     const theme = useContext(ThemeContext);
+    const { ID } = useParams(null);
     const [recommendations, setRecommendations] = useState('');
     const [recome, setRecome] = useState('');
     const [toggle, setToggle] = useState('');
@@ -24,6 +26,7 @@ function ListBox() {
     const [error, setError] = useState();
     const hadleError = useRef();
     const [clickStates, setClickStates] = useState([]);
+    const [DataArtist, setDataArtist] = useState([]);
     const nameGenres = [
         {
             name: 'pop',
@@ -96,6 +99,22 @@ function ListBox() {
 
         reload();
     }, [theme]);
+
+    const FeaturedPlaylist = useCallback(async () => {
+        const playlist = await axios
+            .get('https://api.spotify.com/v1/browse/featured-playlists?country=VN', theme.artistsParmester)
+            .then((responde) => {
+                setDataArtist(responde.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [theme]);
+
+    console.log(ID);
+    useEffect(() => {
+        FeaturedPlaylist();
+    }, [FeaturedPlaylist]);
 
     const play = (e, i, genre) => {
         const updatedRecommendations = { ...recommendations };
@@ -272,6 +291,30 @@ function ListBox() {
                             </div>
                         </>
                     ))}
+                    <div>
+                        <h2 className={cx('title_country')}>Nhạc Việt</h2>
+                        <div className={cx('container_playlist')}>
+                            {DataArtist?.playlists?.items?.map((element, index) => {
+                                console.log(element);
+                                return (
+                                    <div className={cx('Playlist_content')}>
+                                        <Button to={`/playlists/${element?.id}`} itemsong>
+                                            <div className={cx('content_info')}>
+                                                <div className={cx('images')}>
+                                                    <img
+                                                        loading="lazy"
+                                                        src={element?.images[0]?.url}
+                                                        alt={element?.name}
+                                                    />
+                                                </div>
+                                                <h2>{element?.name}</h2>
+                                            </div>
+                                        </Button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

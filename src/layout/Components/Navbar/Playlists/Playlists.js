@@ -6,7 +6,7 @@ import { SpotifyIcon } from '~/assets/Icon/Icon';
 import Button from '~/components/button/Button';
 import NameUser from '~/components/NameUser/NameUser';
 import { useContext } from 'react';
-import { LoginAndRegister } from '~/App';
+import { LoginAndRegister } from '~/components/Context/LoginAndRegister';
 const cx = classNames.bind(styles);
 
 function Playlists({ listP }) {

@@ -18,8 +18,8 @@ import {
     faSortDown,
 } from '@fortawesome/free-solid-svg-icons';
 import Playlists from './Playlists';
-import { LoginAndRegister, Setsize } from '~/App';
-import images from '~/assets/image';
+import { LoginAndRegister } from '~/components/Context/LoginAndRegister';
+import { Setsize } from '~/components/Context/Setsize';
 
 const cx = classNames.bind(styles);
 

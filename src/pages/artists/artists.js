@@ -6,6 +6,7 @@ import styles from './artists.module.scss';
 const cx = classNames.bind(styles);
 
 function Artists() {
+    // const
     return (
         <div className={cx('artists')}>
             <Collection

@@ -3,9 +3,9 @@ import styles from './RegisterandLogin.module.scss';
 import { databate } from './FireBaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { LoginAndRegister } from '~/App';
 import { useEffect, useState } from 'react';
 import Button from '../button/Button';
+import { LoginAndRegister } from '../Context/LoginAndRegister';
 const cx = classNames.bind(styles);
 
 function Register() {

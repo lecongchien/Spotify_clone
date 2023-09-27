@@ -116,13 +116,33 @@
     margin-left: 25px;
     > h4 {
         text-transform: capitalize;
+        margin: 5px 0 10px;
     }
-    > h2 {
+    .name_artist {
         font-size: 2em;
+    }
+    .name_title_artist {
+        font-size: 4em;
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    > p {
+        font-size: 18px;
+        font-weight: 600;
     }
     > div {
         display: flex;
         align-items: center;
+        .spotify {
+            display: flex;
+            align-items: center;
+            > p {
+                margin-left: 4px;
+                font-weight: 600;
+            }
+        }
         > a {
             text-transform: capitalize;
             font-weight: bold;
@@ -138,7 +158,7 @@
             padding-right: 10px;
             border-radius: 50%;
         }
-        > svg {
+        > svg:not(:first-child) {
             width: 5px;
             margin: 0 5px;
         }
@@ -393,6 +413,19 @@ footer {
         > p {
             font-size: 12px;
             font-weight: bold;
+        }
+    }
+}
+
+.heart {
+    > svg {
+        transform: scale(1.6);
+        font-size: 40px;
+        transition: 100ms ease;
+
+        &:hover {
+            transition: 100ms ease;
+            fill: #fff;
         }
     }
 }

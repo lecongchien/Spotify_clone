@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import { HeartIcon, MusicNote } from '~/assets/Icon/Icon';
-import { DataIdSong, Toggle } from '~/App';
 import { useContext, useEffect, useState } from 'react';
 import Noimages from '~/assets/image/noImage.jpg';
 import { ThemeContext } from '~/components/themeContext/themeContext';
+import { DataIdSong } from '~/components/Context/DataIdSong';
+import { Toggle } from '~/components/Context/Toggle';
 const cx = classNames.bind(styles);
 function Expectations({ name }) {
     const [handelToggle, setHandelToggle] = useState(false);

@@ -9,9 +9,9 @@ import SearchItem from '~/pages/Search/SearchItem';
 import CollectionItem from '../CollectionItem';
 import config from '~/config';
 import { CricleDown } from '~/assets/Icon/Icon';
-import { LoginAndRegister } from '~/App';
 import { signOut } from 'firebase/auth';
 import { databate } from '~/components/PasswordLoginWithFirebase/FireBaseConfig';
+import { LoginAndRegister } from '~/components/Context/LoginAndRegister';
 
 const cx = classNames.bind(styles);
 
@@ -96,9 +96,10 @@ function Header() {
                     {allLocation === '/' ? null : (
                         <>
                             {!(
-                                allLocation === `/artists/${IdAlBum}` ||
+                                allLocation === `/artist/${IdAlBum}` ||
                                 allLocation === `/albums/${IdAlBum}` ||
                                 allLocation === `/MyPlaylist/${IdAlBum}` ||
+                                allLocation === `/playlists/${IdAlBum}` ||
                                 allLocation === config.routes.playlist ||
                                 allLocation === config.routes.album ||
                                 allLocation === config.routes.podcast ||

@@ -9,6 +9,7 @@ function ReusableBox({
     key = false,
     image = false,
     name = false,
+    artist = false,
     date = false,
     TopResults = false,
     hover = false,
@@ -35,7 +36,7 @@ function ReusableBox({
                         <img src={image} />
                     </div>
                     <h3>{name}</h3>
-                    <p>{date}</p>
+                    <p>{date ? date : artist === 'artist' && 'Nghệ sĩ'}</p>
                     {cricle_Green_Play && (
                         <button className={cx('cricle_Green_Play')}>
                             <FontAwesomeIcon icon={faPlay} />
