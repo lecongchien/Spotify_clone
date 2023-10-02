@@ -124,7 +124,7 @@ function BoxcardMusic({ NameAlbum = false }) {
                             </>
                         )}
                     </div>
-
+                                
                     {/* ===========Artist========== */}
                     {albums == '' && !(allLocation === `/albums/${IdAlBum}`) ? (
                         <div className={cx('content_genres')}>

@@ -313,7 +313,9 @@ function ListOfPages() {
                                             <p className={cx('number-song')}>
                                                 {numberOfTrack || lengthSong + ' ' + 'bài hát' + ''}{' '}
                                             </p>
-                                            <p className={cx('time')}>{overRall}</p>
+                                            <p className={cx('time')}>
+                                                {allUrl !== `/playlists/${IDUrl}` ? overRall : null}
+                                            </p>
                                         </>
                                     ) : null}
                                 </div>

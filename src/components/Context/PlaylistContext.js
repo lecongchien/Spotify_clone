@@ -4,7 +4,7 @@ export const PlaylistContext = createContext();
 
 export const Playlists = ({ children }) => {
     const [playlistcusomer, setPlaylistcusomer] = useState();
-
+    
     return (
         <PlaylistContext.Provider
             value={{
@@ -15,4 +15,5 @@ export const Playlists = ({ children }) => {
             {children}
         </PlaylistContext.Provider>
     );
+    
 };
