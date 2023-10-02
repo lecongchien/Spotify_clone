@@ -27,78 +27,78 @@ function ListBox() {
     const hadleError = useRef();
     const [clickStates, setClickStates] = useState([]);
     const [DataArtist, setDataArtist] = useState([]);
-    const nameGenres = [
-        {
-            name: 'pop',
-            id: 6,
-        },
-        {
-            name: 'dance',
-            id: 20,
-        },
-        {
-            name: 'k-pop',
-            id: 10,
-        },
-        {
-            name: 'jazz',
-            id: 10,
-        },
-        {
-            name: 'rock',
-            id: 10,
-        },
-        {
-            name: 'classical',
-            id: 10,
-        },
-        {
-            name: 'gospel',
-            id: 10,
-        },
-        {
-            name: 'funk',
-            id: 10,
-        },
-        {
-            name: 'blues',
-            id: 10,
-        },
-        {
-            name: 'folk',
-            id: 10,
-        },
-    ];
+    // const nameGenres = [
+    //     {
+    //         name: 'pop',
+    //         id: 6,
+    //     },
+    //     {
+    //         name: 'dance',
+    //         id: 20,
+    //     },
+    //     {
+    //         name: 'k-pop',
+    //         id: 10,
+    //     },
+    //     {
+    //         name: 'jazz',
+    //         id: 10,
+    //     },
+    //     {
+    //         name: 'rock',
+    //         id: 10,
+    //     },
+    //     {
+    //         name: 'classical',
+    //         id: 10,
+    //     },
+    //     {
+    //         name: 'gospel',
+    //         id: 10,
+    //     },
+    //     {
+    //         name: 'funk',
+    //         id: 10,
+    //     },
+    //     {
+    //         name: 'blues',
+    //         id: 10,
+    //     },
+    //     {
+    //         name: 'folk',
+    //         id: 10,
+    //     },
+    // ];
 
-    useEffect(() => {
-        const reload = async () => {
-            try {
-                const recommendationsByGenre = {};
+    // useEffect(() => {
+    //     const reload = async () => {
+    //         try {
+    //             const recommendationsByGenre = {};
 
-                for (let i = 0; i < nameGenres.length; i++) {
-                    const genre = nameGenres[i].name;
-                    const ID = nameGenres[i].id;
-                    const response = await axios.get(
-                        `https://api.spotify.com/v1/recommendations?seed_genres=${genre}&limit=${ID}`,
-                        theme.artistsParmester,
-                    );
-                    const tracks = response.data.tracks;
+    //             for (let i = 0; i < nameGenres.length; i++) {
+    //                 const genre = nameGenres[i].name;
+    //                 const ID = nameGenres[i].id;
+    //                 const response = await axios.get(
+    //                     `https://api.spotify.com/v1/recommendations?seed_genres=${genre}&limit=${ID}`,
+    //                     theme.artistsParmester,
+    //                 );
+    //                 const tracks = response.data.tracks;
 
-                    if (!recommendationsByGenre[genre]) {
-                        recommendationsByGenre[genre] = [];
-                    }
+    //                 if (!recommendationsByGenre[genre]) {
+    //                     recommendationsByGenre[genre] = [];
+    //                 }
 
-                    recommendationsByGenre[genre].push(...tracks);
-                }
+    //                 recommendationsByGenre[genre].push(...tracks);
+    //             }
 
-                setRecommendations(recommendationsByGenre);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    //             setRecommendations(recommendationsByGenre);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
 
-        reload();
-    }, [theme]);
+    //     reload();
+    // }, [theme]);
 
     const FeaturedPlaylist = useCallback(async () => {
         const playlist = await axios
@@ -116,32 +116,32 @@ function ListBox() {
         FeaturedPlaylist();
     }, [FeaturedPlaylist]);
 
-    const play = (e, i, genre) => {
-        const updatedRecommendations = { ...recommendations };
+    // const play = (e, i, genre) => {
+    //     const updatedRecommendations = { ...recommendations };
 
-        for (const key in updatedRecommendations) {
-            if (key === genre) {
-                updatedRecommendations[key] = updatedRecommendations[key].map((item, index) => {
-                    if (index === i) {
-                        setError(e.preview_url);
-                        setRecome([item]);
-                        const updatedItem = { ...item, isPlaying: !item.isPlaying };
-                        setToggle(updatedItem.isPlaying);
-                        return updatedItem;
-                    } else {
-                        return { ...item, isPlaying: false };
-                    }
-                });
-            } else {
-                updatedRecommendations[key] = updatedRecommendations[key].map((item) => ({
-                    ...item,
-                    isPlaying: false,
-                }));
-            }
-        }
+    //     for (const key in updatedRecommendations) {
+    //         if (key === genre) {
+    //             updatedRecommendations[key] = updatedRecommendations[key].map((item, index) => {
+    //                 if (index === i) {
+    //                     setError(e.preview_url);
+    //                     setRecome([item]);
+    //                     const updatedItem = { ...item, isPlaying: !item.isPlaying };
+    //                     setToggle(updatedItem.isPlaying);
+    //                     return updatedItem;
+    //                 } else {
+    //                     return { ...item, isPlaying: false };
+    //                 }
+    //             });
+    //         } else {
+    //             updatedRecommendations[key] = updatedRecommendations[key].map((item) => ({
+    //                 ...item,
+    //                 isPlaying: false,
+    //             }));
+    //         }
+    //     }
 
-        setRecommendations(updatedRecommendations);
-    };
+    //     setRecommendations(updatedRecommendations);
+    // };
 
     const handleMouseEnter = (e) => {
         setImages(e.album.images[1].url);
@@ -225,7 +225,7 @@ function ListBox() {
                     <h3>Please choose another song</h3>
                 </div>
                 <div className={cx('song_items')}>
-                    {Object.keys(recommendations).map((genre, index) => (
+                    {/* {Object.keys(recommendations).map((genre, index) => (
                         <>
                             <div className={cx('content_bo')}>
                                 <div className={cx('header_content')}>
@@ -290,7 +290,7 @@ function ListBox() {
                                 </div>
                             </div>
                         </>
-                    ))}
+                    ))} */}
                     <div>
                         <h2 className={cx('title_country')}>Nhạc Việt</h2>
                         <div className={cx('container_playlist')}>
