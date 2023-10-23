@@ -55,7 +55,7 @@ function DefaultLayout({ children }) {
                         {children}
                     </div>
                 </div>
-
+        
                 <Expectations name={righttab} />
             </div>
             <MoodTool />

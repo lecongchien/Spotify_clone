@@ -215,177 +215,191 @@ function MoodTool() {
         setToggle(!toggle);
     };
     return (
-        <div className={cx('moodTool')}>
-            <Toggle.Consumer>
-                {(context) => {
-                    context.toggle(toggle);
-                }}
-            </Toggle.Consumer>
-            <Count>
-                {(context) => {
-                    context.setCounts(count);
-                }}
-            </Count>
-            <div className={cx('content_player')}>
-                <div className={cx('music_information')}>
-                    {data.setIdPlaySong && (
-                        <>
-                            <div className={cx('image')}>
-                                <img
-                                    src={
-                                        data?.setIdPlaySong[1]?.images[2]?.url ||
-                                        data?.setIdPlaySong[0]?.album?.images[2]?.url ||
-                                        Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.album?.images[2]?.url
-                                    }
-                                    alt=""
-                                />
+        <>
+            <div className={cx('moodTool')}>
+                <Toggle.Consumer>
+                    {(context) => {
+                        context.toggle(toggle);
+                    }}
+                </Toggle.Consumer>
+                <Count>
+                    {(context) => {
+                        context.setCounts(count);
+                    }}
+                </Count>
+                <div className={cx('content_player')}>
+                    <div className={cx('music_information')}>
+                        {data.setIdPlaySong && (
+                            <>
+                                <div className={cx('image')}>
+                                    <img
+                                        src={
+                                            data?.setIdPlaySong[1]?.images[2]?.url ||
+                                            data?.setIdPlaySong[0]?.album?.images[2]?.url ||
+                                            Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.album?.images[2]
+                                                ?.url
+                                        }
+                                        alt=""
+                                    />
+                                </div>
+                                <div className={cx('title')}>
+                                    <a href="" className={cx('title_name_song')}>
+                                        {Playlist.playlistcontext[0] &&
+                                            Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.name}
+                                        {nameSong ? nameSong : data?.setIdPlaySong[0]?.name}
+                                    </a>
+                                    <a href="" alt="">
+                                        {Playlist.playlistcontext[0] &&
+                                            Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.artists[0].name}
+                                        {data?.setIdPlaySong[0]?.artists[0]?.name}
+                                    </a>
+                                </div>
+                                <HeartLips />
+                                <FontAwesomeIcon icon={faImages} />
+                            </>
+                        )}
+                    </div>
+                    <div className={cx('function_seet_music')}>
+                        <div className={cx('music-player')}>
+                            <div className={cx('controls')}>
+                                <Tippy
+                                    className={cx('tippy-title')}
+                                    arrow={false}
+                                    placement={'top'}
+                                    content="Bật trộn bài"
+                                >
+                                    <button onClick={mixsongs} className={cx('Mix')}>
+                                        {<Mix />}
+                                    </button>
+                                </Tippy>
+                                <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Trước">
+                                    <button onClick={handlePrevious} className={cx('prev')}>
+                                        {<Prev />}
+                                    </button>
+                                </Tippy>
+                                <Tippy
+                                    className={cx('tippy-title')}
+                                    arrow={false}
+                                    placement={'top'}
+                                    content={!isPlaying ? 'Phát' : 'Tạm dừng'}
+                                >
+                                    <button className={cx('play-btn')} onClick={togglePlayPause}>
+                                        <FontAwesomeIcon
+                                            icon={!isPlaying || (!Play.setPlayAndpause && IdData) ? faPlay : faPause}
+                                        />
+                                    </button>
+                                </Tippy>
+                                <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Sau">
+                                    <button onClick={handleNext} className={cx('prev')}>
+                                        {<Next />}
+                                    </button>
+                                </Tippy>
+
+                                <Tippy
+                                    className={cx('tippy-title')}
+                                    arrow={false}
+                                    placement={'top'}
+                                    content={!loop ? 'Bật chế độ lặp lại một bài' : 'Hủy kích hoạt chế độ lặp lại'}
+                                >
+                                    <button onClick={toggleLoop} className={cx('loop')}>
+                                        <p style={{ color: !loop ? 'gray' : '#1db954' }}>{<LoopMusic />}</p>
+                                    </button>
+                                </Tippy>
                             </div>
-                            <div className={cx('title')}>
-                                <a href="" className={cx('title_name_song')}>
-                                    {Playlist.playlistcontext[0] &&
-                                        Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.name}
-                                    {nameSong ? nameSong : data?.setIdPlaySong[0]?.name}
-                                </a>
-                                <a href="" alt="">
-                                    {Playlist.playlistcontext[0] &&
-                                        Playlist?.playlistcontext[0]?.tracks?.items[count]?.track?.artists[0].name}
-                                    {data?.setIdPlaySong[0]?.artists[0]?.name}
-                                </a>
+
+                            <audio
+                                ref={audioRef}
+                                onTimeUpdate={handleTimeUpdate}
+                                onLoadedMetadata={handleLoadedMetadata}
+                                id="audio-player"
+                                src={IdData}
+                            ></audio>
+
+                            <div className={cx('controls_value')}>
+                                <div className={cx('number_running')}>{formatTime(currentTime)}</div>
+                                <div className={cx('range_run')}>
+                                    <input
+                                        ref={reWidMusic}
+                                        onChange={handleSliderChange}
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="1"
+                                        value={rewind ? rewind : 0}
+                                        className={cx('spotify-slider')}
+                                    />
+                                    <span style={{ width: `calc(${inputRange}%  + 0.5px)` }}></span>
+                                </div>
+                                <div className={cx('number_running')}>{formatTime(duration)}</div>
                             </div>
-                            <HeartLips />
-                            <FontAwesomeIcon icon={faImages} />
-                        </>
-                    )}
-                </div>
-                <div className={cx('function_seet_music')}>
-                    <div className={cx('music-player')}>
-                        <div className={cx('controls')}>
-                            <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Bật trộn bài">
-                                <button onClick={mixsongs} className={cx('Mix')}>
-                                    {<Mix />}
-                                </button>
-                            </Tippy>
-                            <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Trước">
-                                <button onClick={handlePrevious} className={cx('prev')}>
-                                    {<Prev />}
+                        </div>
+                    </div>
+                    <div className={cx('Tool_Users')}>
+                        <div className={cx('wrap')}>
+                            <Tippy
+                                className={cx('tippy-title')}
+                                arrow={false}
+                                placement={'top'}
+                                content="Chế độ xem Đang phát"
+                            >
+                                <button onClick={() => togglePlay()}>
+                                    <WatchPlay />
                                 </button>
                             </Tippy>
                             <Tippy
                                 className={cx('tippy-title')}
                                 arrow={false}
                                 placement={'top'}
-                                content={!isPlaying ? 'Phát' : 'Tạm dừng'}
+                                content="Danh sách chờ"
                             >
-                                <button className={cx('play-btn')} onClick={togglePlayPause}>
+                                <button>
+                                    <PlaylistDelay />
+                                </button>
+                            </Tippy>
+                            <Tippy
+                                className={cx('tippy-title')}
+                                arrow={false}
+                                placement={'top'}
+                                content="Kết nối với một thiết bị"
+                            >
+                                <button>
+                                    <Devides />
+                                </button>
+                            </Tippy>
+                            <Tippy
+                                className={cx('tippy-title')}
+                                arrow={false}
+                                placement={'top'}
+                                content={!muted ? 'Tắt tiếng' : 'Bật tiếng'}
+                            >
+                                <button onClick={() => muteds()}>
                                     <FontAwesomeIcon
-                                        icon={!isPlaying || (!Play.setPlayAndpause && IdData) ? faPlay : faPause}
+                                        icon={!muted ? (changeValue > 50 ? faVolumeHigh : faVolumeLow) : faVolumeXmark}
                                     />
                                 </button>
                             </Tippy>
-                            <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Sau">
-                                <button onClick={handleNext} className={cx('prev')}>
-                                    {<Next />}
-                                </button>
-                            </Tippy>
-
-                            <Tippy
-                                className={cx('tippy-title')}
-                                arrow={false}
-                                placement={'top'}
-                                content={!loop ? 'Bật chế độ lặp lại một bài' : 'Hủy kích hoạt chế độ lặp lại'}
-                            >
-                                <button onClick={toggleLoop} className={cx('loop')}>
-                                    <p style={{ color: !loop ? 'gray' : '#1db954' }}>{<LoopMusic />}</p>
-                                </button>
-                            </Tippy>
-                        </div>
-
-                        <audio
-                            ref={audioRef}
-                            onTimeUpdate={handleTimeUpdate}
-                            onLoadedMetadata={handleLoadedMetadata}
-                            id="audio-player"
-                            src={IdData}
-                        ></audio>
-
-                        <div className={cx('controls_value')}>
-                            <div className={cx('number_running')}>{formatTime(currentTime)}</div>
-                            <div className={cx('range_run')}>
-                                <input
-                                    ref={reWidMusic}
-                                    onChange={handleSliderChange}
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    step="1"
-                                    value={rewind ? rewind : 0}
-                                    className={cx('spotify-slider')}
-                                />
-                                <span style={{ width: `calc(${inputRange}%  + 0.5px)` }}></span>
-                            </div>
-                            <div className={cx('number_running')}>{formatTime(duration)}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className={cx('Tool_Users')}>
-                    <div className={cx('wrap')}>
-                        <Tippy
-                            className={cx('tippy-title')}
-                            arrow={false}
-                            placement={'top'}
-                            content="Chế độ xem Đang phát"
-                        >
-                            <button onClick={() => togglePlay()}>
-                                <WatchPlay />
-                            </button>
-                        </Tippy>
-                        <Tippy className={cx('tippy-title')} arrow={false} placement={'top'} content="Danh sách chờ">
-                            <button>
-                                <PlaylistDelay />
-                            </button>
-                        </Tippy>
-                        <Tippy
-                            className={cx('tippy-title')}
-                            arrow={false}
-                            placement={'top'}
-                            content="Kết nối với một thiết bị"
-                        >
-                            <button>
-                                <Devides />
-                            </button>
-                        </Tippy>
-                        <Tippy
-                            className={cx('tippy-title')}
-                            arrow={false}
-                            placement={'top'}
-                            content={!muted ? 'Tắt tiếng' : 'Bật tiếng'}
-                        >
-                            <button onClick={() => muteds()}>
-                                <FontAwesomeIcon
-                                    icon={!muted ? (changeValue > 50 ? faVolumeHigh : faVolumeLow) : faVolumeXmark}
-                                />
-                            </button>
-                        </Tippy>
-                        <div className={cx('input_range')}>
-                            <div className={cx('range_run')}>
-                                <input
-                                    style={{ width: '90px' }}
-                                    ref={volumeRef}
-                                    onChange={handleVolumeChange}
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    step="1"
-                                    value={changeValue}
-                                    className={cx('spotify-slider')}
-                                />
-                                <span style={{ width: `calc(${changeValue}%  + 0.5px)` }}></span>
+                            <div className={cx('input_range')}>
+                                <div className={cx('range_run')}>
+                                    <input
+                                        style={{ width: '90px' }}
+                                        ref={volumeRef}
+                                        onChange={handleVolumeChange}
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="1"
+                                        value={changeValue}
+                                        className={cx('spotify-slider')}
+                                    />
+                                    <span style={{ width: `calc(${changeValue}%  + 0.5px)` }}></span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div>{IdData === null ? <Error /> : null}</div>
+        </>
     );
 }
 

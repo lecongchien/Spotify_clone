@@ -28,7 +28,6 @@ function Playsongs({ component, componentPlaylist }) {
     const [toggleplaylist, setTogglePlaylist] = useState('');
     //
     const setcout = useContext(Count);
-    console.log(setcout.setCounthandle);
     const locations = useLocation();
     const allLocation = locations.pathname;
     const setIdPlaylist = allLocation.split('/');
@@ -181,7 +180,6 @@ function Playsongs({ component, componentPlaylist }) {
                         const remainingSeconds = seconds % 60;
                         //
                         const run = setcout.setCounthandle === index;
-                        console.log(run);
                         return (
                             <tr
                                 className={cx('see_quest')}

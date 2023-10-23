@@ -27,78 +27,6 @@ function ListBox() {
     const hadleError = useRef();
     const [clickStates, setClickStates] = useState([]);
     const [DataArtist, setDataArtist] = useState([]);
-    // const nameGenres = [
-    //     {
-    //         name: 'pop',
-    //         id: 6,
-    //     },
-    //     {
-    //         name: 'dance',
-    //         id: 20,
-    //     },
-    //     {
-    //         name: 'k-pop',
-    //         id: 10,
-    //     },
-    //     {
-    //         name: 'jazz',
-    //         id: 10,
-    //     },
-    //     {
-    //         name: 'rock',
-    //         id: 10,
-    //     },
-    //     {
-    //         name: 'classical',
-    //         id: 10,
-    //     },
-    //     {
-    //         name: 'gospel',
-    //         id: 10,
-    //     },
-    //     {
-    //         name: 'funk',
-    //         id: 10,
-    //     },
-    //     {
-    //         name: 'blues',
-    //         id: 10,
-    //     },
-    //     {
-    //         name: 'folk',
-    //         id: 10,
-    //     },
-    // ];
-
-    // useEffect(() => {
-    //     const reload = async () => {
-    //         try {
-    //             const recommendationsByGenre = {};
-
-    //             for (let i = 0; i < nameGenres.length; i++) {
-    //                 const genre = nameGenres[i].name;
-    //                 const ID = nameGenres[i].id;
-    //                 const response = await axios.get(
-    //                     `https://api.spotify.com/v1/recommendations?seed_genres=${genre}&limit=${ID}`,
-    //                     theme.artistsParmester,
-    //                 );
-    //                 const tracks = response.data.tracks;
-
-    //                 if (!recommendationsByGenre[genre]) {
-    //                     recommendationsByGenre[genre] = [];
-    //                 }
-
-    //                 recommendationsByGenre[genre].push(...tracks);
-    //             }
-
-    //             setRecommendations(recommendationsByGenre);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-
-    //     reload();
-    // }, [theme]);
 
     const FeaturedPlaylist = useCallback(async () => {
         const playlist = await axios
@@ -116,35 +44,8 @@ function ListBox() {
         FeaturedPlaylist();
     }, [FeaturedPlaylist]);
 
-    // const play = (e, i, genre) => {
-    //     const updatedRecommendations = { ...recommendations };
-
-    //     for (const key in updatedRecommendations) {
-    //         if (key === genre) {
-    //             updatedRecommendations[key] = updatedRecommendations[key].map((item, index) => {
-    //                 if (index === i) {
-    //                     setError(e.preview_url);
-    //                     setRecome([item]);
-    //                     const updatedItem = { ...item, isPlaying: !item.isPlaying };
-    //                     setToggle(updatedItem.isPlaying);
-    //                     return updatedItem;
-    //                 } else {
-    //                     return { ...item, isPlaying: false };
-    //                 }
-    //             });
-    //         } else {
-    //             updatedRecommendations[key] = updatedRecommendations[key].map((item) => ({
-    //                 ...item,
-    //                 isPlaying: false,
-    //             }));
-    //         }
-    //     }
-
-    //     setRecommendations(updatedRecommendations);
-    // };
-
     const handleMouseEnter = (e) => {
-        setImages(e.album.images[1].url);
+        setImages(e.images[0]?.url);
         setIsHovered(true);
     };
 
@@ -225,79 +126,17 @@ function ListBox() {
                     <h3>Please choose another song</h3>
                 </div>
                 <div className={cx('song_items')}>
-                    {/* {Object.keys(recommendations).map((genre, index) => (
-                        <>
-                            <div className={cx('content_bo')}>
-                                <div className={cx('header_content')}>
-                                    <h2>{genre === 'pop' ? null : genre}</h2>
-                                    <p onClick={() => hanldeBoxAll(index)}>{genre === 'pop' ? null : 'Hiện tất cả'}</p>
-                                </div>
-                                <div
-                                    className={cx(
-                                        genre === 'pop' ? 'container' : clickStates[index] ? 'change' : 'content_onder',
-                                    )}
-                                >
-                                    {recommendations &&
-                                        recommendations[genre].map((e, i) => {
-                                            return (
-                                                <>
-                                                    <div
-                                                        className={cx(
-                                                            genre !== 'pop'
-                                                                ? !e.isPlaying
-                                                                    ? 'box'
-                                                                    : 'handle_box'
-                                                                : !e.isPlaying
-                                                                ? 'content_box'
-                                                                : 'hande_content',
-                                                        )}
-                                                        key={i}
-                                                        onMouseEnter={() => handleMouseEnter(e)}
-                                                        onMouseLeave={() => handleMouseLeave()}
-                                                    >
-                                                        <Button to={`/albums/${e.album.id}`} itemsong>
-                                                            <div className={cx('content_info')}>
-                                                                <div
-                                                                    className={cx(
-                                                                        genre === 'rock' ? 'cricle_image' : 'images',
-                                                                    )}
-                                                                >
-                                                                    <img
-                                                                        loading="lazy"
-                                                                        src={e?.album?.images[1]?.url}
-                                                                        alt={e.album.name}
-                                                                    />
-                                                                </div>
-                                                                {genre !== 'pop' ? null : <h2>{e.artists[0].name}</h2>}
-                                                                {genre === 'pop' ? null : (
-                                                                    <div className={cx('info_art')}>
-                                                                        <h3>{e.artists[0].name}</h3>
-                                                                        <p>{e.album.name}</p>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        </Button>
-                                                        <button
-                                                            className={cx('cricle_Green_Play')}
-                                                            onClick={() => play(e, i, genre)}
-                                                        >
-                                                            <FontAwesomeIcon icon={e.isPlaying ? faPause : faPlay} />
-                                                        </button>
-                                                    </div>
-                                                </>
-                                            );
-                                        })}
-                                </div>
-                            </div>
-                        </>
-                    ))} */}
                     <div>
                         <h2 className={cx('title_country')}>Nhạc Việt</h2>
                         <div className={cx('container_playlist')}>
                             {DataArtist?.playlists?.items?.map((element, index) => {
                                 console.log(element);
                                 return (
-                                    <div className={cx('Playlist_content')}>
+                                    <div
+                                        className={cx('Playlist_content')}
+                                        onMouseEnter={() => handleMouseEnter(element)}
+                                        onMouseLeave={() => handleMouseLeave(element)}
+                                    >
                                         <Button to={`/playlists/${element?.id}`} itemsong>
                                             <div className={cx('content_info')}>
                                                 <div className={cx('images')}>
